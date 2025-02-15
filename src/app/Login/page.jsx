@@ -2,43 +2,48 @@
 
 import Head from "next/head";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+    setMessage("Loading...");
 
     if (!email || !password) {
       setErrorMessage("Please fill in all fields.");
+      setMessage("");
       return;
     }
 
     try {
-      const response = await fetch("https://api-elektronik-finalproject.aran8276.site/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await axios.post(
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
+      console.log("Response dari API:", response.data);
 
       // Simpan token ke localStorage
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", response.data.accesstoken);
 
-      // Redirect ke halaman admin/dashboard
-      window.location.href = "/admin";
+      setMessage("Login successful! Redirecting...");
+      
+      // Redirect ke halaman admin setelah sukses
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 2000);
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.response?.data?.message || "Login failed");
+      setMessage("");
     }
   };
 
@@ -54,6 +59,7 @@ export default function Login() {
         <div className="flex flex-col items-center w-full">
           <h2 className="text-3xl font-bold mb-8 text-gray-900">Login</h2>
           <form className="w-full" onSubmit={handleSubmit}>
+            {message && <div className="mb-4 text-green-500 text-sm">{message}</div>}
             {errorMessage && <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>}
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
