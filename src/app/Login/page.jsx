@@ -14,6 +14,14 @@ export default function Login() {
       setErrorMessage("Please fill in all fields.");
       return;
     }
+    if (email.length > 50) {
+      setErrorMessage("Email exceeds character limit.");
+      return;
+    }
+    if (password.length > 20) {
+      setErrorMessage("Password exceeds character limit.");
+      return;
+    }
     setErrorMessage("");
     // Handle login logic here
   };
