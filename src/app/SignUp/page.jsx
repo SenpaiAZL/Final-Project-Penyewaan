@@ -1,19 +1,18 @@
 "use client";
 
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
-    nama: "",
+    name: "", 
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
-  const [token, setToken] = useState(null);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -28,7 +27,7 @@ export default function Signup() {
     setMessage("Loading...");
     setErrorMessage("");
 
-    if (!formData.nama || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
       setErrorMessage("Please fill in all fields.");
       return;
     }
@@ -39,37 +38,30 @@ export default function Signup() {
     }
 
     try {
+      console.log("Mengirim data ke API:", formData);
+
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/auth/register",
         {
-          nama: formData.nama,
+          name: formData.name, 
           email: formData.email,
           password: formData.password,
         }
       );
 
       console.log("Response dari API:", response.data);
+      setMessage("Registration successful! Redirecting to login...");
 
-      // Simpan token ke localStorage
-      localStorage.setItem("accesstoken", response?.data?.accesstoken);
-      setToken(response.data.accesstoken);
-      setMessage("Registration successful! Redirecting...");
-
-      // Redirect ke halaman admin setelah sukses
+      // Redirect ke halaman login setelah sukses register
       setTimeout(() => {
-        window.location.href = "/admin";
+        window.location.href = "/Login";
       }, 2000);
     } catch (error) {
+      console.error("Error dari API:", error.response?.data || error.message);
       setErrorMessage(error.response?.data?.message || "Registration failed");
       setMessage("");
     }
   };
-
-  useEffect(() => {
-    if (token) {
-      setToken(token);
-    }
-  }, [token]);
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen py-12">
@@ -82,15 +74,15 @@ export default function Signup() {
         {errorMessage && <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>}
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nama">
-              Nama
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+              Name
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="nama"
+              id="name"
               type="text"
-              placeholder="Nama"
-              value={formData.nama}
+              placeholder="Name"
+              value={formData.name}
               onChange={handleChange}
             />
           </div>
