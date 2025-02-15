@@ -1,17 +1,19 @@
 "use client";
-// pages/signup.js
+
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
     nama: "",
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const [token, setToken] = useState(null);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -21,25 +23,53 @@ export default function Signup() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.nama ||
-      !formData.username ||
-      !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
+    setMessage("Loading...");
+    setErrorMessage("");
+
+    if (!formData.nama || !formData.email || !formData.password || !formData.confirmPassword) {
       setErrorMessage("Please fill in all fields.");
       return;
     }
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
     }
-    setErrorMessage("");
-    // Handle sign-up logic here
+
+    try {
+      const response = await axios.post(
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/register",
+        {
+          nama: formData.nama,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      console.log("Response dari API:", response.data);
+
+      // Simpan token ke localStorage
+      localStorage.setItem("accesstoken", response?.data?.accesstoken);
+      setToken(response.data.accesstoken);
+      setMessage("Registration successful! Redirecting...");
+
+      // Redirect ke halaman admin setelah sukses
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 2000);
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || "Registration failed");
+      setMessage("");
+    }
   };
+
+  useEffect(() => {
+    if (token) {
+      setToken(token);
+    }
+  }, [token]);
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen py-12">
@@ -48,15 +78,11 @@ export default function Signup() {
       </Head>
       <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-6 max-w-lg w-full">
         <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign Up</h2>
+        {message && <div className="mb-4 text-green-500 text-sm">{message}</div>}
+        {errorMessage && <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>}
         <form className="w-full" onSubmit={handleSubmit}>
-          {errorMessage && (
-            <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
-          )}
           <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="nama"
-            >
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nama">
               Nama
             </label>
             <input
@@ -69,10 +95,7 @@ export default function Signup() {
             />
           </div>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
             <input
@@ -85,10 +108,7 @@ export default function Signup() {
             />
           </div>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
               Password
             </label>
             <input
@@ -101,10 +121,7 @@ export default function Signup() {
             />
           </div>
           <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="confirmPassword"
-            >
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
               Confirm Password
             </label>
             <input
