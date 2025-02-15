@@ -6,21 +6,18 @@ import { useState } from "react";
 export default function Signup() {
   const [formData, setFormData] = useState({
     nama: "",
-    alamat: "",
-    noTelpon: "",
+    username: "",
     email: "",
-    sim: null,
-    ktp: null,
     password: "",
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
-    const { id, value, files } = e.target;
+    const { id, value } = e.target;
     setFormData({
       ...formData,
-      [id]: files ? files[0] : value,
+      [id]: value,
     });
   };
 
@@ -28,11 +25,8 @@ export default function Signup() {
     e.preventDefault();
     if (
       !formData.nama ||
-      !formData.alamat ||
-      !formData.noTelpon ||
+      !formData.username ||
       !formData.email ||
-      !formData.sim ||
-      !formData.ktp ||
       !formData.password ||
       !formData.confirmPassword
     ) {
@@ -48,12 +42,12 @@ export default function Signup() {
   };
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div className="bg-gray-100 flex items-center justify-center min-h-screen py-12">
       <Head>
         <title>Sign Up Page</title>
       </Head>
-      <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-8 max-w-4xl w-full">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900">Sign Up</h2>
+      <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-6 max-w-lg w-full">
+        <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign Up</h2>
         <form className="w-full" onSubmit={handleSubmit}>
           {errorMessage && (
             <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
@@ -63,46 +57,14 @@ export default function Signup() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="nama"
             >
-              Nama dan Nama Lengkap
+              Nama
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
               id="nama"
               type="text"
-              placeholder="Nama dan Nama Lengkap"
+              placeholder="Nama"
               value={formData.nama}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="alamat"
-            >
-              Alamat
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="alamat"
-              type="text"
-              placeholder="Alamat"
-              value={formData.alamat}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="noTelpon"
-            >
-              No Telepon
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="noTelpon"
-              type="text"
-              placeholder="No Telepon"
-              value={formData.noTelpon}
               onChange={handleChange}
             />
           </div>
@@ -119,36 +81,6 @@ export default function Signup() {
               type="email"
               placeholder="Email"
               value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="sim"
-            >
-              SIM
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="sim"
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="ktp"
-            >
-              KTP
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="ktp"
-              type="file"
-              accept="image/*"
               onChange={handleChange}
             />
           </div>
