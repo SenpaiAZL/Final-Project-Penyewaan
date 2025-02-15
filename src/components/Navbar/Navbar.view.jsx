@@ -10,7 +10,7 @@ export default function NavbarView() {
   };
 
   return (
-    <header className="bg-white shadow-md fixed w-full top-0 transition duration-300">
+    <header className="bg-white shadow-md fixed w-full top-0 transition duration-300 z-50">
       <div className="container mx-auto flex justify-between items-center p-6">
         {/* Top Left: Home Link */}
         <div className="flex items-center">
@@ -23,10 +23,10 @@ export default function NavbarView() {
           <Link href="/Home" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Home</p>
           </Link>
-          <Link href="/product" passHref>
+          <Link href="/Product" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Product</p>
           </Link>
-          <Link href="/contact" passHref>
+          <Link href="/Contact" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Contact</p>
           </Link>
         </nav>
@@ -39,13 +39,13 @@ export default function NavbarView() {
             onClick={handleLogoClick}
           />
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2">
-              <Link href="/profile" passHref>
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2">
+              <Link href="/Profile" passHref>
                 <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                   Profile
                 </p>
               </Link>
-              <Link href="/settings" passHref>
+              <Link href="/Setting" passHref>
                 <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                   Settings
                 </p>
