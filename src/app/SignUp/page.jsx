@@ -1,17 +1,18 @@
 "use client";
-// pages/signup.js
+
 import Head from "next/head";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
-    nama: "",
-    username: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -21,11 +22,13 @@ export default function Signup() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("Loading...");
+    setErrorMessage("");
+
     if (
-      !formData.nama ||
-      !formData.username ||
+      !formData.name ||
       !formData.email ||
       !formData.password ||
       !formData.confirmPassword
@@ -33,12 +36,36 @@ export default function Signup() {
       setErrorMessage("Please fill in all fields.");
       return;
     }
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
     }
-    setErrorMessage("");
-    // Handle sign-up logic here
+
+    try {
+      console.log("Mengirim data ke API:", formData);
+
+      const response = await axios.post(
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/register",
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      console.log("Response dari API:", response.data);
+      setMessage("Registration successful! Redirecting to login...");
+
+      // Redirect ke halaman login setelah sukses register
+      setTimeout(() => {
+        window.location.href = "/Login";
+      }, 2000);
+    } catch (error) {
+      console.error("Error dari API:", error.response?.data || error.message);
+      setErrorMessage(error.response?.data?.message || "Registration failed");
+      setMessage("");
+    }
   };
 
   return (
@@ -48,23 +75,26 @@ export default function Signup() {
       </Head>
       <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-6 max-w-lg w-full">
         <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign Up</h2>
+        {message && (
+          <div className="mb-4 text-green-500 text-sm">{message}</div>
+        )}
+        {errorMessage && (
+          <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
+        )}
         <form className="w-full" onSubmit={handleSubmit}>
-          {errorMessage && (
-            <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
-          )}
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="nama"
+              htmlFor="name"
             >
-              Nama
+              Name
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="nama"
+              id="name"
               type="text"
-              placeholder="Nama"
-              value={formData.nama}
+              placeholder="Name"
+              value={formData.name}
               onChange={handleChange}
             />
           </div>

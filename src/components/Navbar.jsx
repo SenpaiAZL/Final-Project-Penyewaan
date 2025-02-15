@@ -14,7 +14,7 @@ export default function Navbar() {
         </div>
         {/* Center: Home and Product Links */}
         <nav className="flex-grow flex justify-center">
-          <Link href="/" passHref>
+          <Link href="/Home" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Home</p>
           </Link>
           <Link href="/product" passHref>
