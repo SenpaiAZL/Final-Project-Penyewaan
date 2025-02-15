@@ -101,13 +101,19 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-6">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                 type="submit"
               >
                 Login
               </button>
+              <a
+                href="/auth/Forgot"
+                className="text-blue-500 hover:underline"
+              >
+                Forgot Password?
+              </a>
             </div>
           </form>
           <p className="mt-8 text-gray-600 text-sm">

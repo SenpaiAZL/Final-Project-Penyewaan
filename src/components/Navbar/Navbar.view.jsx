@@ -1,9 +1,16 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function NavbarView() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleLogoClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
-    <header className="bg-white shadow-md">
+    <header className="bg-white shadow-md fixed w-full top-0 transition duration-300">
       <div className="container mx-auto flex justify-between items-center p-6">
         {/* Top Left: Home Link */}
         <div className="flex items-center">
@@ -11,7 +18,7 @@ export default function NavbarView() {
             <p className="text-2xl font-bold text-gray-900">Voltify</p>
           </Link>
         </div>
-        {/* Center: Home and Product Links */}
+        {/* Center: Home, Product, and Contact Links */}
         <nav className="flex-grow flex justify-center">
           <Link href="/Home" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Home</p>
@@ -19,17 +26,37 @@ export default function NavbarView() {
           <Link href="/product" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Product</p>
           </Link>
-        </nav>
-        {/* Right: Contact and User Icon */}
-        <nav className="flex items-center">
           <Link href="/contact" passHref>
             <p className="text-gray-700 mx-4 hover:underline">Contact</p>
           </Link>
+        </nav>
+        {/* Right: User Icon and Settings */}
+        <nav className="relative flex items-center">
           <img
             src="/user.png"
             alt="User Logo"
             className="w-8 h-8 object-contain cursor-pointer"
+            onClick={handleLogoClick}
           />
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2">
+              <Link href="/profile" passHref>
+                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  Profile
+                </p>
+              </Link>
+              <Link href="/settings" passHref>
+                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  Settings
+                </p>
+              </Link>
+              <Link href="/logout" passHref>
+                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  Logout
+                </p>
+              </Link>
+            </div>
+          )}
         </nav>
       </div>
     </header>
