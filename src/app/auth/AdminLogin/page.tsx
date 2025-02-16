@@ -4,7 +4,7 @@ import Head from "next/head";
 import axios from "axios";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
@@ -14,7 +14,7 @@ const AdminLogin = () => {
     setErrorMessage("");
     setMessage("Loading...");
 
-    if (!email || !password) {
+    if (!username || !password) {
       setErrorMessage("Please fill in all fields.");
       setMessage("");
       return;
@@ -24,7 +24,7 @@ const AdminLogin = () => {
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/auth/admin/login",
         {
-          email,
+          username,
           password,
         }
       );
@@ -71,17 +71,17 @@ const AdminLogin = () => {
             <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email"
+                htmlFor="username"
               >
-                Email
+                Username
               </label>
               <input
                 className="shadow-md appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                id="email"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="mb-6">
