@@ -1,36 +1,36 @@
 "use client";
-// src/app/Product/page.jsx
+// src/app/Alat/page.jsx
 import Head from "next/head";
 import { useState } from "react";
 import Card from "../../../components/card/Card";
 
-export default function Products() {
-  const products = [
+export default function Alat() {
+  const alat = [
     {
       id: 1,
-      name: "Product 1",
+      name: "Alat 1",
       price: "$29.99",
-      description: "Description for Product 1",
-      image: "/product1.jpg",
+      description: "Description for Alat 1",
+      image: "/alat1.jpg",
       category: "Electronics",
     },
     {
       id: 2,
-      name: "Product 2",
+      name: "Alat 2",
       price: "$39.99",
-      description: "Description for Product 2",
-      image: "/product2.jpg",
+      description: "Description for Alat 2",
+      image: "/alat2.jpg",
       category: "Furniture",
     },
     {
       id: 3,
-      name: "Product 3",
+      name: "Alat 3",
       price: "$39.99",
-      description: "Description for Product 3",
-      image: "/product3.jpg",
+      description: "Description for Alat 3",
+      image: "/alat3.jpg",
       category: "Electronics",
     },
-    // Add more products as needed
+    // Add more alat as needed
   ];
 
   const categories = ["All", "Electronics", "Furniture"];
@@ -45,23 +45,23 @@ export default function Products() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredProducts = products.filter((product) => {
+  const filteredAlat = alat.filter((alat) => {
     return (
-      (selectedCategory === "All" || product.category === selectedCategory) &&
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      (selectedCategory === "All" || alat.category === selectedCategory) &&
+      alat.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 p-6">
       <Head>
-        <title>Product List</title>
+        <title>Alat List</title>
       </Head>
       {/* Hero Section */}
       <section className="bg-gray-600 text-white p-6 rounded-lg shadow-lg mb-12 w-full text-center">
-        <h1 className="text-4xl font-bold mb-4">Our Products</h1>
+        <h1 className="text-4xl font-bold mb-4">Our Alat</h1>
         <p className="text-xl">
-          Browse through our extensive collection of products.
+          Browse through our extensive collection of alat.
         </p>
       </section>
       <div className="w-full max-w-3xl">
@@ -81,15 +81,15 @@ export default function Products() {
           {/* Search Bar */}
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search alat..."
             className="border border-gray-300 rounded-md py-2 px-4 text-black"
             value={searchTerm}
             onChange={handleSearchChange}
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <Card key={product.id} product={product} />
+          {filteredAlat.map((alat) => (
+            <Card key={alat.id} alat={alat} />
           ))}
         </div>
       </div>

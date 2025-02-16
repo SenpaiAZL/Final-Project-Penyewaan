@@ -33,7 +33,7 @@ export default function AdminDashboard() {
                 Penyewaan
               </h2>
               <p className="text-gray-700">
-                Add, edit, or remove products from the catalog.
+                Add, edit, or remove alat from the catalog.
               </p>
             </div>
           </Link>
