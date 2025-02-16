@@ -2,7 +2,7 @@
 // src/app/Alat/page.jsx
 import Head from "next/head";
 import { useState } from "react";
-import Card from "../../../components/card/Card";
+import { Card } from "../../../components/card/Card";
 
 export default function Alat() {
   const alat = [

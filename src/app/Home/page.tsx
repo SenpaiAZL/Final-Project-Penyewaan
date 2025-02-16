@@ -3,7 +3,8 @@ import Head from "next/head";
 import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import Card from "@/components/card/Card";
+import { Card } from "@/components/card/Card";
+
 export default function Home() {
   const products = [
     {
@@ -32,6 +33,11 @@ export default function Home() {
     },
     // Add more products as needed
   ];
+
+  // Define the onClick function
+  const handleCardClick = (alat: { id: number; name: string; price: string; description: string; image: string; category: string; }) => {
+    console.log("Alat clicked:", alat);
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -65,7 +71,7 @@ export default function Home() {
         {/* Carousel Section */}
         <section className="py-12">
           <h2 className="text-4xl font-bold text-center mb-6">
-            Featured Products
+            Featured Alat
           </h2>
           <Carousel
             showArrows={true}
@@ -77,9 +83,9 @@ export default function Home() {
             swipeable={true}
             emulateTouch={true}
           >
-            {products.map((product) => (
-              <div key={product.id} className="flex justify-center">
-                <Card product={product} />
+            {products.map((alat) => (
+              <div key={alat.id} className="flex justify-center">
+                <Card alat={alat} onClick={() => handleCardClick(alat)} />
               </div>
             ))}
           </Carousel>

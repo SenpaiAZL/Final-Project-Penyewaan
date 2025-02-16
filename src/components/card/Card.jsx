@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 
-export default function Card({ alat, onClick }) {
+// Define your component without using prop types
+function Card({ alat, onClick }) {
   return (
     <div
       className="group block p-6 max-w-sm bg-white rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 cursor-pointer"
@@ -20,3 +21,5 @@ export default function Card({ alat, onClick }) {
     </div>
   );
 }
+
+export { Card };

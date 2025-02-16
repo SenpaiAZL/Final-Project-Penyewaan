@@ -2,6 +2,7 @@
 
 import Head from "next/head";
 import { useState } from "react";
+import axios from "axios";
 
 export default function AdminSignup() {
   const [formData, setFormData] = useState({
@@ -27,20 +28,25 @@ export default function AdminSignup() {
 
     if (!formData.name || !formData.password || !formData.confirmPassword) {
       setErrorMessage("Please fill in all fields.");
+      setMessage("");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match.");
+      setMessage("");
       return;
     }
 
     try {
       console.log("Submitting data:", formData);
 
-      // Here you can add the API call for admin registration.
-      // const response = await axios.post('YOUR_ADMIN_SIGNUP_API', formData);
-      // console.log('Response from API:', response.data);
+      // API call for admin registration.
+      const response = await axios.post(
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/admin/register",
+        formData
+      );
+      console.log("Response from API:", response.data);
 
       setMessage("Registration successful! Redirecting to login...");
 
