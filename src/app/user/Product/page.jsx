@@ -1,41 +1,26 @@
 "use client";
 // src/app/Alat/page.jsx
 import Head from "next/head";
-import { useState } from "react";
-import { Card } from "../../../components/card/Card";
+import { useState, useEffect } from "react";
+import Card from "../../../components/card/Card";
+import { fetchAlat } from "../../../app/api";
 
 export default function Alat() {
-  const alat = [
-    {
-      id: 1,
-      name: "Alat 1",
-      price: "$29.99",
-      description: "Description for Alat 1",
-      image: "/alat1.jpg",
-      category: "Electronics",
-    },
-    {
-      id: 2,
-      name: "Alat 2",
-      price: "$39.99",
-      description: "Description for Alat 2",
-      image: "/alat2.jpg",
-      category: "Furniture",
-    },
-    {
-      id: 3,
-      name: "Alat 3",
-      price: "$39.99",
-      description: "Description for Alat 3",
-      image: "/alat3.jpg",
-      category: "Electronics",
-    },
-    // Add more alat as needed
-  ];
-
-  const categories = ["All", "Electronics", "Furniture"];
+  const [alat, setAlat] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchAlat();
+        setAlat(data.data); // Asumsikan data alat langsung tersedia di `data`
+      } catch (error) {
+        console.error("Failed to fetch alat:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -45,13 +30,16 @@ export default function Alat() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredAlat = alat.filter((alat) => {
+  const filteredAlat = alat?.filter((item) => {
     return (
-      (selectedCategory === "All" || alat.category === selectedCategory) &&
-      alat.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+      console.log((selectedCategory === "All" || item.category === selectedCategory) &&
+      item.alat_nama.toLowerCase().includes(searchTerm.toLowerCase()))
+      // (selectedCategory === "All" || item.category === selectedCategory) &&
+      // item.alat_nama.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
-
+console.log(alat)
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 p-6">
       <Head>
@@ -72,7 +60,7 @@ export default function Alat() {
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
-            {categories.map((category) => (
+            {["All", "Electronics", "Furniture"].map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>
@@ -88,8 +76,8 @@ export default function Alat() {
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAlat.map((alat) => (
-            <Card key={alat.id} alat={alat} />
+          {alat?.map((item) => (
+            <Card key={item.alat_id} alat={item} />
           ))}
         </div>
       </div>
