@@ -4,7 +4,7 @@ import NavbarView from "./Navbar.view";
 
 export default function Navbar() {
   const pathname = usePathname();
-  if (pathname.startsWith("/auth")) {
+  if (pathname.startsWith("/auth")||("/admin")) {
     return null;
   }
   return <NavbarView />;

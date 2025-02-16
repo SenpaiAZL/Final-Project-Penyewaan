@@ -1,3 +1,4 @@
+"use client"
 // pages/index.js
 import Head from "next/head";
 
@@ -23,7 +24,7 @@ export default function Home() {
               Your one-stop solution for all your needs.
             </p>
             <a
-              href="/signup"
+              href="/Product"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded"
             >
               Get Started

@@ -1,10 +1,9 @@
 "use client";
-
+import React, { useState } from "react";
 import Head from "next/head";
-import { useState } from "react";
 import axios from "axios";
 
-export default function Login() {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,23 +22,23 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "https://api-elektronik-finalproject.aran8276.site/api/auth/login",
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/admin/login",
         {
           email,
           password,
         }
       );
 
-      console.log("Response dari API:", response.data);
+      console.log("Response from API:", response.data);
 
-      // Simpan token ke localStorage
-      localStorage.setItem("token", response.data.accesstoken);
+      // Save token to localStorage
+      localStorage.setItem("adminToken", response.data.accesstoken);
 
       setMessage("Login successful! Redirecting...");
 
-      // Redirect ke halaman admin setelah sukses
+      // Redirect to admin dashboard after success
       setTimeout(() => {
-        window.location.href = "/Home";
+        window.location.href = "/AdminDashboard";
       }, 2000);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Login failed");
@@ -50,18 +49,18 @@ export default function Login() {
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen">
       <Head>
-        <title>Login Page</title>
+        <title>Admin Login Page</title>
       </Head>
       <div className="flex flex-row items-center bg-white shadow-2xl rounded-lg p-8 max-w-4xl w-full space-x-8">
         <div className="flex-shrink-0">
           <img
-            src="/User.png"
-            alt="User Logo"
+            src="/user.png"
+            alt="Admin Logo"
             className="w-32 h-32 object-contain"
           />
         </div>
         <div className="flex flex-col items-center w-full">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">Login</h2>
+          <h2 className="text-3xl font-bold mb-8 text-gray-900">Admin Login</h2>
           <form className="w-full" onSubmit={handleSubmit}>
             {message && (
               <div className="mb-4 text-green-500 text-sm">{message}</div>
@@ -115,18 +114,23 @@ export default function Login() {
           </form>
           <p className="mt-8 text-gray-600 text-sm">
             Don't have an account?{" "}
-            <a href="SignUp" className="text-blue-500 hover:underline">
-              Sign up
+            <a
+              href="/auth/AdminRegister"
+              className="text-blue-500 hover:underline"
+            >
+              Register as Admin
             </a>
           </p>
         </div>
       </div>
       <button
         className="fixed bottom-4 left-4 p-2 bg-gray-300 rounded-full hover:bg-gray-400 focus:outline-none"
-        onClick={() => (window.location.href = "/admin/AdminLogin")}
+        onClick={() => (window.location.href = "/auth/Login")}
       >
-        🛠️
+        🔙
       </button>
     </div>
   );
-}
+};
+
+export default AdminLogin;
