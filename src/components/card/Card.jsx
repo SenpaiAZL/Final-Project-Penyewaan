@@ -1,11 +1,11 @@
-// components/card/Card.jsx
-import Link from "next/link";
+"use client";
+import React from "react";
 
-export default function Card({ product }) {
+export default function Card({ product, onClick }) {
   return (
-    <Link
-      href={`/product/${product.id}`}
-      className="group block p-6 max-w-sm bg-white rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300"
+    <div
+      className="group block p-6 max-w-sm bg-white rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 cursor-pointer"
+      onClick={onClick}
     >
       <img
         src={product.image}
@@ -17,6 +17,6 @@ export default function Card({ product }) {
       </h3>
       <p className="text-gray-600">{product.price}</p>
       <p className="text-gray-600 mt-2">{product.description}</p>
-    </Link>
+    </div>
   );
 }
