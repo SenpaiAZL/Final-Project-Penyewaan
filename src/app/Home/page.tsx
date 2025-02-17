@@ -1,43 +1,31 @@
 "use client";
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Card } from "@/components/card/Card";
+import Card from "@/components/card/Card";
+import { fetchAlat } from "@/app/api";
 
 export default function Home() {
-  const products = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: "$29.99",
-      description: "Description for Product 1",
-      image: "/product1.jpg",
-      category: "Electronics",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: "$39.99",
-      description: "Description for Product 2",
-      image: "/product2.jpg",
-      category: "Furniture",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: "$39.99",
-      description: "Description for Product 3",
-      image: "/product3.jpg",
-      category: "Electronics",
-    },
-    // Add more products as needed
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Define the onClick function
-  const handleCardClick = (alat: { id: number; name: string; price: string; description: string; image: string; category: string; }) => {
-    console.log("Alat clicked:", alat);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchAlat();
+        setProducts(data.data); // Asumsikan data alat ada di `data.data`
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        setError("Failed to load featured products.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -45,6 +33,7 @@ export default function Home() {
         <title>Voltify - Home</title>
       </Head>
       <main className="p-0">
+        {/* Hero Section */}
         <section className="relative text-center">
           <img
             src="/Homepage.png"
@@ -71,24 +60,28 @@ export default function Home() {
         {/* Carousel Section */}
         <section className="py-12">
           <h2 className="text-4xl font-bold text-center mb-6">
-            Featured Alat
+            Featured Products
           </h2>
-          <Carousel
-            showArrows={true}
-            showStatus={false}
-            showIndicators={false}
-            infiniteLoop={true}
-            autoPlay={true}
-            interval={3000}
-            swipeable={true}
-            emulateTouch={true}
-          >
-            {products.map((alat) => (
-              <div key={alat.id} className="flex justify-center">
-                <Card alat={alat} onClick={() => handleCardClick(alat)} />
-              </div>
-            ))}
-          </Carousel>
+          {loading && <p className="text-center">Loading...</p>}
+          {error && <p className="text-center text-red-500">{error}</p>}
+          {!loading && !error && (
+            <Carousel
+              showArrows={true}
+              showStatus={false}
+              showIndicators={false}
+              infiniteLoop={true}
+              autoPlay={true}
+              interval={3000}
+              swipeable={true}
+              emulateTouch={true}
+            >
+              {products.map((product) => (
+                <div key={product.alat_id} className="flex justify-center">
+                  <Card alat={product} />
+                </div>
+              ))}
+            </Carousel>
+          )}
         </section>
       </main>
     </div>
