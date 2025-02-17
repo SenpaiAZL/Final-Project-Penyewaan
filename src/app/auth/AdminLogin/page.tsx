@@ -22,29 +22,25 @@ const AdminLogin = () => {
 
     try {
       const response = await axios.post(
-        "https://api-elektronik-finalproject.aran8276.site/api/admin/login",
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/admin/login",
         {
           username,
           password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
       console.log("Response from API:", response.data);
 
-      // Simpan token ke localStorage
+      // Save token to localStorage
       localStorage.setItem("adminToken", response.data.accesstoken);
 
       setMessage("Login successful! Redirecting...");
+
+      // Redirect to admin dashboard after success
       setTimeout(() => {
         window.location.href = "/admin/AdminDashboard";
       }, 2000);
     } catch (error) {
-      console.error("Error from API:", error.response?.data || error.message);
       setErrorMessage(error.response?.data?.message || "Login failed");
       setMessage("");
     }
