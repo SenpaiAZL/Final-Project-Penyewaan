@@ -1,24 +1,56 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function ManageKategori() {
-  // Initial dummy kategori data
-  const [kategori, setKategori] = useState([
+// Dummy API functions
+const fetchCategories = async () => {
+  // Simulate API call with a delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return [
     { id: 1, name: "Electronics" },
     { id: 2, name: "Furniture" },
-  ]);
+  ];
+};
 
+const createCategory = async (category) => {
+  // Simulate API call with a delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return { id: Math.random(), ...category }; // Return a new category with a random ID
+};
+
+const updateCategory = async (id, category) => {
+  // Simulate API call with a delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return { id, ...category }; // Return the updated category
+};
+
+const deleteCategory = async (id) => {
+  // Simulate API call with a delay
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return id; // Return the deleted category ID
+};
+
+export default function ManageKategori() {
+  const [kategori, setKategori] = useState([]);
   const [form, setForm] = useState({ name: "" });
   const [editId, setEditId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    // Fetch initial categories from the dummy API
+    const loadCategories = async () => {
+      const initialKategori = await fetchCategories();
+      setKategori(initialKategori);
+    };
+    loadCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("Loading...");
     setErrorMessage("");
@@ -29,25 +61,26 @@ export default function ManageKategori() {
       return;
     }
 
-    if (editId) {
-      // Update kategori
-      const updatedKategori = kategori.map((k) =>
-        k.id === editId ? { ...k, ...form } : k
-      );
-      setKategori(updatedKategori);
-      setMessage("Category updated successfully!");
-    } else {
-      // Create kategori
-      const newKategori = {
-        id: kategori.length + 1,
-        ...form,
-      };
-      setKategori([...kategori, newKategori]);
-      setMessage("Category added successfully!");
+    try {
+      if (editId) {
+        // Update kategori
+        const updatedCategory = await updateCategory(editId, form);
+        const updatedKategori = kategori.map((k) =>
+          k.id === editId ? updatedCategory : k
+        );
+        setKategori(updatedKategori);
+        setMessage("Category updated successfully!");
+      } else {
+        // Create kategori
+        const newCategory = await createCategory(form);
+        setKategori([...kategori, newCategory]);
+        setMessage("Category added successfully!");
+      }
+      setForm({ name: "" });
+      setEditId(null);
+    } catch (error) {
+      setErrorMessage("An error occurred while saving the category.");
     }
-
-    setForm({ name: "" });
-    setEditId(null);
   };
 
   const handleEdit = (k) => {
@@ -55,10 +88,15 @@ export default function ManageKategori() {
     setEditId(k.id);
   };
 
-  const handleDelete = (id) => {
-    const updatedKategori = kategori.filter((k) => k.id !== id);
-    setKategori(updatedKategori);
-    setMessage("Category deleted successfully!");
+  const handleDelete = async (id) => {
+    try {
+      await deleteCategory(id);
+      const updatedKategori = kategori.filter((k) => k.id !== id);
+      setKategori(updatedKategori);
+      setMessage("Category deleted successfully!");
+    } catch (error) {
+      setErrorMessage("An error occurred while deleting the category.");
+    }
   };
 
   return (
