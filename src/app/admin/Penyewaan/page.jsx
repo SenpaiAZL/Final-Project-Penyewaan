@@ -1,12 +1,31 @@
 "use client";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 
 export default function ManagePenyewaan() {
-  const accessToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLWVsZWt0cm9uaWstZmluYWxwcm9qZWN0LmFyYW44Mjc2LnNpdGUvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3Mzk3NTIwOTcsImV4cCI6MTczOTc1NTY5NywibmJmIjoxNzM5NzUyMDk3LCJqdGkiOiJTUkhqNlVBeFZ1OHVMMnY4Iiwic3ViIjoiMjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwicmVmcmVzaCI6ZmFsc2V9.d5BO6sS2cgU2vkC6tDUeqf8LM38KANisVbnWDlqzfr4"; // Replace with your actual access token
+  // Initial dummy penyewaan data
+  const [penyewaan, setPenyewaan] = useState([
+    {
+      id: 1,
+      name: "John Doe",
+      item: "Laptop",
+      tanggalSewa: "2023-04-01",
+      tanggalKembali: "2023-04-10",
+      statusPembayaran: "Lunas",
+      statusPengembalian: "Belum Kembali",
+      totalHarga: 1000000,
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      item: "Projector",
+      tanggalSewa: "2023-04-02",
+      tanggalKembali: "2023-04-09",
+      statusPembayaran: "Belum Dibayar",
+      statusPengembalian: "Kembali",
+      totalHarga: 500000,
+    },
+  ]);
 
-  const [penyewaan, setPenyewaan] = useState([]);
   const [form, setForm] = useState({
     name: "",
     item: "",
@@ -20,33 +39,12 @@ export default function ManagePenyewaan() {
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    // Fetch initial penyewaan data from API
-    const fetchPenyewaan = async () => {
-      try {
-        const response = await axios.get(
-          "https://api-elektronik-finalproject.aran8276.site/api/penyewaan",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setPenyewaan(response.data);
-      } catch (error) {
-        console.error("Error fetching penyewaan data:", error);
-      }
-    };
-
-    fetchPenyewaan();
-  }, [accessToken]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setMessage("Loading...");
     setErrorMessage("");
@@ -65,52 +63,33 @@ export default function ManagePenyewaan() {
       return;
     }
 
-    try {
-      if (editId) {
-        // Update penyewaan
-        const response = await axios.put(
-          `https://api-elektronik-finalproject.aran8276.site/api/penyewaan${editId}`,
-          form,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const updatedPenyewaan = penyewaan.map((p) =>
-          p.id === editId ? response.data : p
-        );
-        setPenyewaan(updatedPenyewaan);
-        setMessage("Penyewaan updated successfully!");
-      } else {
-        // Create penyewaan
-        const response = await axios.post(
-          "https://api-elektronik-finalproject.aran8276.site/api/penyewaan",
-          form,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setPenyewaan([...penyewaan, response.data]);
-        setMessage("Penyewaan added successfully!");
-      }
-
-      setForm({
-        name: "",
-        item: "",
-        tanggalSewa: "",
-        tanggalKembali: "",
-        statusPembayaran: "",
-        statusPengembalian: "",
-        totalHarga: "",
-      });
-      setEditId(null);
-    } catch (error) {
-      console.error("Error saving penyewaan data:", error);
-      setErrorMessage("Error saving penyewaan data.");
+    if (editId) {
+      // Update penyewaan
+      const updatedPenyewaan = penyewaan.map((p) =>
+        p.id === editId ? { ...p, ...form } : p
+      );
+      setPenyewaan(updatedPenyewaan);
+      setMessage("Penyewaan updated successfully!");
+    } else {
+      // Create penyewaan
+      const newPenyewaan = {
+        id: penyewaan.length + 1,
+        ...form,
+      };
+      setPenyewaan([...penyewaan, newPenyewaan]);
+      setMessage("Penyewaan added successfully!");
     }
+
+    setForm({
+      name: "",
+      item: "",
+      tanggalSewa: "",
+      tanggalKembali: "",
+      statusPembayaran: "",
+      statusPengembalian: "",
+      totalHarga: "",
+    });
+    setEditId(null);
   };
 
   const handleEdit = (p) => {
@@ -126,23 +105,10 @@ export default function ManagePenyewaan() {
     setEditId(p.id);
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(
-        `https://api-elektronik-finalproject.aran8276.site/api/penyewaan/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const updatedPenyewaan = penyewaan.filter((p) => p.id !== id);
-      setPenyewaan(updatedPenyewaan);
-      setMessage("Penyewaan deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting penyewaan data:", error);
-      setErrorMessage("Error deleting penyewaan data.");
-    }
+  const handleDelete = (id) => {
+    const updatedPenyewaan = penyewaan.filter((p) => p.id !== id);
+    setPenyewaan(updatedPenyewaan);
+    setMessage("Penyewaan deleted successfully!");
   };
 
   return (

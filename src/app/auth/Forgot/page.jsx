@@ -1,9 +1,9 @@
 // pages/forgot-password.js
 "use client";
-
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -14,7 +14,6 @@ export default function ForgotPassword() {
     e.preventDefault();
     setErrorMessage("");
     setMessage("Loading...");
-
     if (!email) {
       setErrorMessage("Please enter your email address.");
       setMessage("");
@@ -22,21 +21,15 @@ export default function ForgotPassword() {
     }
 
     try {
-      // Simulate an API call to request a password reset
+      // Kirim permintaan ke server untuk mengirim email reset password
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/auth/forgot-password",
-        {
-          email,
-        }
+        { email }
       );
-
       console.log("Response dari API:", response.data);
-
       setMessage("Password reset link sent! Please check your email.");
     } catch (error) {
-      setErrorMessage(
-        error.response?.data?.message || "Failed to send reset link"
-      );
+      setErrorMessage(error.response?.data?.message || "Failed to send reset link");
       setMessage("");
     }
   };
@@ -72,13 +65,21 @@ export default function ForgotPassword() {
             />
           </div>
           <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              type="submit"
-            >
-              Send Reset Link
-            </button>
-          </div>
+          <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                type="submit"
+          >
+                Send Reset Link
+          </button>
+          <Link href={"/auth/Setpassword"}>
+          <button
+               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 ml-4"
+               type="button"
+         > 
+           Reset
+         </button>
+         </Link>
+        </div>
         </form>
       </div>
     </div>

@@ -3,8 +3,6 @@
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -14,6 +12,7 @@ export default function Signup() {
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -25,6 +24,7 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("Loading...");
     setErrorMessage("");
 
     if (
@@ -44,6 +44,7 @@ export default function Signup() {
 
     try {
       console.log("Mengirim data ke API:", formData);
+
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/auth/register",
         {
@@ -52,23 +53,18 @@ export default function Signup() {
           password: formData.password,
         }
       );
+
       console.log("Response dari API:", response.data);
+      setMessage("Registration successful! Redirecting to login...");
 
-      toast.success("Registration successful! Redirecting to login...", {
-        position: "top-right",
-        autoClose: 2000,
-      });
-
+      // Redirect ke halaman login setelah sukses register
       setTimeout(() => {
         window.location.href = "/auth/Login";
-      }, 2500);
+      }, 2000);
     } catch (error) {
       console.error("Error dari API:", error.response?.data || error.message);
       setErrorMessage(error.response?.data?.message || "Registration failed");
-      toast.error(error.response?.data?.message || "Registration failed", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      setMessage("");
     }
   };
 
@@ -77,9 +73,11 @@ export default function Signup() {
       <Head>
         <title>Sign Up Page</title>
       </Head>
-      <ToastContainer />
       <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-6 max-w-lg w-full">
         <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign Up</h2>
+        {message && (
+          <div className="mb-4 text-green-500 text-sm">{message}</div>
+        )}
         {errorMessage && (
           <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
         )}
@@ -159,7 +157,7 @@ export default function Signup() {
         </form>
         <p className="mt-6 text-gray-600 text-sm">
           Already have an account?{" "}
-          <a href="/Login" className="text-blue-500 hover:underline">
+          <a href="Login" className="text-blue-500 hover:underline">
             Login
           </a>
         </p>

@@ -30,17 +30,18 @@ export default function Login() {
         }
       );
 
-      console.log("Response dari API:", response.data);
+      console.log("Response dari API:", response?.data);
 
       // Simpan token ke localStorage
-      localStorage.setItem("token", response.data.accesstoken);
+      localStorage.setItem(token, response?.access_token);
+      localStorage.setItem("tedsttoken", response?.access_token);
 
       setMessage("Login successful! Redirecting...");
 
       // Redirect ke halaman admin setelah sukses
-      setTimeout(() => {
-        window.location.href = "Home";
-      }, 2000);
+      // setTimeout(() => {
+      //   window.location.href = "Home";
+      // }, 2000);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Login failed");
       setMessage("");
