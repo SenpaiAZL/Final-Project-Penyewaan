@@ -1,32 +1,54 @@
 "use client";
 import { useState, useEffect } from "react";
 
-// Dummy API functions
+// API URL
+const API_URL = "https://api-elektronik-finalproject.aran8276.site/api/kategori";
+
+// API functions
 const fetchCategories = async () => {
-  // Simulate API call with a delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return [
-    { id: 1, name: "Electronics" },
-    { id: 2, name: "Furniture" },
-  ];
+  const response = await fetch(`${API_URL}/categories`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+  return response.json();
 };
 
 const createCategory = async (category) => {
-  // Simulate API call with a delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return { id: Math.random(), ...category }; // Return a new category with a random ID
+  const response = await fetch(`${API_URL}/categories`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(category),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create category");
+  }
+  return response.json();
 };
 
 const updateCategory = async (id, category) => {
-  // Simulate API call with a delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return { id, ...category }; // Return the updated category
+  const response = await fetch(`${API_URL}/categories/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(category),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update category");
+  }
+  return response.json();
 };
 
 const deleteCategory = async (id) => {
-  // Simulate API call with a delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return id; // Return the deleted category ID
+  const response = await fetch(`${API_URL}/categories/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to delete category");
+  }
+  return response.json();
 };
 
 export default function ManageKategori() {
@@ -37,10 +59,14 @@ export default function ManageKategori() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Fetch initial categories from the dummy API
+    // Fetch initial categories from the API
     const loadCategories = async () => {
-      const initialKategori = await fetchCategories();
-      setKategori(initialKategori);
+      try {
+        const initialKategori = await fetchCategories();
+        setKategori(initialKategori);
+      } catch (error) {
+        setErrorMessage("Failed to load categories");
+      }
     };
     loadCategories();
   }, []);
