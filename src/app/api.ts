@@ -67,28 +67,30 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
+    
     // Jika status 401 (Unauthorized) dan belum mencoba refresh token
     if (error.response?.status === 401 && !originalRequest._retry) {
+      const newAccessToken = await refreshAccessToken();
+      
       if (isRefreshing) {
+        console.log("juadysadtasjdtas")
         // Jika sedang refresh token, masukkan request ke antrian
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
             return apiClient(originalRequest);
           })
           .catch((err) => {
             return Promise.reject(err);
           });
-      }
-
-      originalRequest._retry = true;
+        }
+        
+        originalRequest._retry = true;
       isRefreshing = true;
 
       try {
-        const newAccessToken = await refreshAccessToken();
         apiClient.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${newAccessToken}`;
