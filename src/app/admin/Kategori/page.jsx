@@ -1,66 +1,91 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  fetchKategori,
+  createKategori,
+  updateKategori,
+  deleteKategori,
+} from "@/app/api"; // Impor fungsi API dari api.ts
 
 export default function ManageKategori() {
-  // Initial dummy kategori data
-  const [kategori, setKategori] = useState([
-    { id: 1, name: "Electronics" },
-    { id: 2, name: "Furniture" },
-  ]);
-
-  const [form, setForm] = useState({ name: "" });
+  const [kategori, setKategori] = useState([]);
+  const [form, setForm] = useState({ kategori_nama: "" });
   const [editId, setEditId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
+
+  // Fetch data kategori saat halaman dimuat
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchKategori(); // Ambil data dari API
+        setKategori(data.data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setErrorMessage("Failed to load categories.");
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("Loading...");
     setErrorMessage("");
 
-    if (!form.name) {
+    if (!form.kategori_nama) {
       setErrorMessage("Please fill in the category name.");
       setMessage("");
       return;
     }
 
-    if (editId) {
-      // Update kategori
-      const updatedKategori = kategori.map((k) =>
-        k.id === editId ? { ...k, ...form } : k
-      );
-      setKategori(updatedKategori);
-      setMessage("Category updated successfully!");
-    } else {
-      // Create kategori
-      const newKategori = {
-        id: kategori.length + 1,
-        ...form,
-      };
-      setKategori([...kategori, newKategori]);
-      setMessage("Category added successfully!");
-    }
+    try {
+      if (editId) {
+        // Update kategori
+        await updateKategori(editId, form); // Kirim PUT request ke API
+        setMessage("Category updated successfully!");
+      } else {
+        // Create kategori
+        await createKategori(form); // Kirim POST request ke API
+        setMessage("Category added successfully!");
+      }
 
-    setForm({ name: "" });
-    setEditId(null);
+      // Refresh data setelah operasi berhasil
+      const updatedData = await fetchKategori();
+      setKategori(updatedData);
+      setForm({ name: "" });
+      setEditId(null);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setErrorMessage(error.response?.data?.message || "An error occurred.");
+      setMessage("");
+    }
   };
 
   const handleEdit = (k) => {
-    setForm({ name: k.name });
-    setEditId(k.id);
+    setForm({ name:k.kategori_nama});
+    setEditId(k.kategori_id);
   };
 
-  const handleDelete = (id) => {
-    const updatedKategori = kategori.filter((k) => k.id !== id);
-    setKategori(updatedKategori);
-    setMessage("Category deleted successfully!");
-  };
+  const handleDelete = async (id) => {
+    try {
+      await deleteKategori(id); // Kirim DELETE request ke API
+      setMessage("Category deleted successfully!");
 
+      // Refresh data setelah penghapusan
+      const updatedData = await fetchKategori();
+      setKategori(updatedData);
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      setErrorMessage(error.response?.data?.message || "Failed to delete category.");
+    }
+  };
+console.log(kategori)
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       <main className="flex-grow container mx-auto p-6">
@@ -72,6 +97,7 @@ export default function ManageKategori() {
             delete kategori data.
           </p>
         </section>
+
         <form onSubmit={handleSubmit} className="mb-6">
           {message && (
             <div className="mb-4 text-green-500 text-sm">{message}</div>
@@ -88,11 +114,11 @@ export default function ManageKategori() {
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="name"
-              name="name"
+              id="id"
+              name="kategori_nama"
               type="text"
               placeholder="Category Name"
-              value={form.name}
+              value={form.kategori_nama}
               onChange={handleChange}
             />
           </div>
@@ -105,12 +131,13 @@ export default function ManageKategori() {
             </button>
           </div>
         </form>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {kategori.map((k) => (
-            <div key={k.id} className="bg-white shadow-lg rounded-lg p-6">
+            <div key={k.kategori_id} className="bg-white shadow-lg rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
-                {k.name}
-              </h2>
+                {k.kategori_nama}
+              </h2> 
               <div className="mt-4 flex space-x-2">
                 <button
                   className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
@@ -120,7 +147,7 @@ export default function ManageKategori() {
                 </button>
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
-                  onClick={() => handleDelete(k.id)}
+                  onClick={() => handleDelete(k.kategori_id)}
                 >
                   Delete
                 </button>

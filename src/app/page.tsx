@@ -1,4 +1,4 @@
-"use client";
+"use client"
 // pages/index.js
 import Head from "next/head";
 
@@ -17,7 +17,9 @@ export default function Home() {
           />
           <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
           <div className="absolute inset-0 flex flex-col justify-center items-center z-10">
-            <h2 className="text-6xl font-bold text-white mb-4">kanade 👍</h2>
+            <h2 className="text-6xl font-bold text-white mb-4">
+              Welcome to Voltify
+            </h2>
             <p className="text-xl text-white mb-8">
               Your one-stop solution for all your needs.
             </p>

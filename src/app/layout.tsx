@@ -1,10 +1,11 @@
-import { ErrorBoundary } from "react-error-boundary";
-import ErrorFallback from "@/components/ErrorFallback/ErrorFallback.tsx"; // Pastikan path-nya benar
+// pages/_app.js
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
+import AdminNavbar from "@/components/NavbarAdmin/NavbarAdmin.view";
 import "./globals.css";
+import NavbarAdminView from "@/components/NavbarAdmin/NavbarAdmin.view";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -33,13 +34,12 @@ export default function RootLayout({
         <meta name="description" content={metadata.description} />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <main>
         <Navbar />
-        {/* Pakai `fallback={<ErrorFallback />}` */}
-        <ErrorBoundary fallback={<ErrorFallback />}>
-          <main>{children}</main>
-        </ErrorBoundary>
-        <Footer />
+          {children}
+          <Footer/>
+        </main>
       </body>
     </html>
   );
-}
+} 

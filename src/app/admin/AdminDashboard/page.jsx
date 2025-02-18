@@ -33,7 +33,7 @@ export default function AdminDashboard() {
                 Penyewaan
               </h2>
               <p className="text-gray-700">
-                Add, edit, or remove alat from the catalog.
+                Add, edit, or remove rent from the catalog.
               </p>
             </div>
           </Link>
@@ -46,6 +46,15 @@ export default function AdminDashboard() {
               <p className="text-gray-700">Track and manage kategori</p>
             </div>
           </Link>
+          {/* Alat */}
+          <Link href="/admin/Alat" passHref>
+            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900">
+                Alat
+              </h2>
+              <p className="text-gray-700">Add, Edit, or remove alat</p>
+            </div>
+          </Link>
           {/* Manage Settings */}
           <Link href="/admin/" passHref>
             <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
@@ -54,6 +63,17 @@ export default function AdminDashboard() {
               </h2>
               <p className="text-gray-700">
                 Configure system settings and preferences.
+              </p>
+            </div>
+          </Link>
+                    {/* Manage Admin Settings */}
+                    <Link href="/Profile" passHref>
+            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900">
+                Admin Account center
+              </h2>
+              <p className="text-gray-700">
+                Read every account registered as admin
               </p>
             </div>
           </Link>

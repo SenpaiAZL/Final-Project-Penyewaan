@@ -11,8 +11,8 @@ export default function Card({ alat, onClick }) {
         src={alat.image}
         alt={alat.alat_nama}
         className="w-full h-40 object-cover mb-4 rounded"
-      /> 
-        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-500">
+      />
+      <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-500">
         {alat.alat_nama}
       </h3>
       <p className="text-gray-600">{alat.alat_hargaperhari}</p>

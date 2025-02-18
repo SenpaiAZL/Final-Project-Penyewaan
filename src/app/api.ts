@@ -67,30 +67,29 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
+
     // Jika status 401 (Unauthorized) dan belum mencoba refresh token
     if (error.response?.status === 401 && !originalRequest._retry) {
-      const newAccessToken = await refreshAccessToken();
-      
       if (isRefreshing) {
-        console.log("juadysadtasjdtas")
         // Jika sedang refresh token, masukkan request ke antrian
+        const newAccessToken = await refreshAccessToken();
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then((token) => {
+          .then(() => {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
             return apiClient(originalRequest);
           })
           .catch((err) => {
             return Promise.reject(err);
           });
-        }
-        
-        originalRequest._retry = true;
+      }
+
+      originalRequest._retry = true;
       isRefreshing = true;
 
       try {
+        const newAccessToken = await refreshAccessToken();
         apiClient.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${newAccessToken}`;
@@ -169,15 +168,105 @@ export const reset =async(email, token, password, password_confirmation)=>{
   }
 
   
-}
+};
+
+// export const fetchSewa = async () => {
+//   try {
+//     const response = (await apiClient.get("/penyewaan" ));
+//     return response?.data;
+//   } catch (error) {
+//     console.error("Error fetching alat:", error);
+//     throw error;
+//   }
+// };
 
 
-export const fetchSewa = async () => {
+// Fungsi untuk fetch semua kategori
+export const fetchKategori = async () => {
   try {
-    const response = (await apiClient.get("/penyewaan" ));
-    return response?.data;
+    const response = await apiClient.get("/kategori");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching kategori:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menambahkan kategori baru
+export const createKategori = async (data) => {
+  try {
+    const response = await apiClient.post("/kategori", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating kategori:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk memperbarui kategori
+export const updateKategori = async (id, data) => {
+  try {
+    const response = await apiClient.put(`/kategori/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating kategori:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menghapus kategori
+export const deleteKategori = async (id) => {
+  try {
+    const response = await apiClient.delete(`/kategori/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting kategori:", error);
+    throw error;
+  }
+};
+
+
+// Fungsi untuk mengambil data alat 
+export const fetchalat = async () => {
+  try {
+    const response = await apiClient.get("/alat");
+    return response.data;
   } catch (error) {
     console.error("Error fetching alat:", error);
     throw error;
   }
 };
+
+// Fungsi untuk menambahkan alat baru
+export const createAlat = async (data) => {
+  try {
+    const response = await apiClient.post("/alat", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating alat:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk memperbarui alat
+export const updateAlat = async (id, data) => {
+  try {
+    const response = await apiClient.put(`/alat/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating alat:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menghapus alat
+export const deleteAlat = async (id) => {
+  try {
+    const response = await apiClient.delete(`/alat/${Number(id)}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting alat:", error.response);
+    throw error;
+  }
+};
+
