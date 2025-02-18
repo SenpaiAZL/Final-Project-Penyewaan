@@ -19,7 +19,6 @@ export default function ManageKategori() {
     const fetchData = async () => {
       try {
         const data = await fetchKategori(); // Ambil data dari API
-        console.log("Fetched categories:", data); // Debugging data
         setKategori(data.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -38,11 +37,13 @@ export default function ManageKategori() {
     e.preventDefault();
     setMessage("Loading...");
     setErrorMessage("");
+
     if (!form.kategori_nama) {
       setErrorMessage("Please fill in the category name.");
       setMessage("");
       return;
     }
+
     try {
       if (editId) {
         // Update kategori
@@ -53,10 +54,11 @@ export default function ManageKategori() {
         await createKategori(form); // Kirim POST request ke API
         setMessage("Category added successfully!");
       }
+
       // Refresh data setelah operasi berhasil
       const updatedData = await fetchKategori();
-      setKategori(updatedData.data);
-      setForm({ kategori_nama: "" });
+      setKategori(updatedData);
+      setForm({ name: "" });
       setEditId(null);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -66,7 +68,7 @@ export default function ManageKategori() {
   };
 
   const handleEdit = (k) => {
-    setForm({ kategori_nama: k.kategori_nama });
+    setForm({ name:k.kategori_nama});
     setEditId(k.kategori_id);
   };
 
@@ -74,15 +76,16 @@ export default function ManageKategori() {
     try {
       await deleteKategori(id); // Kirim DELETE request ke API
       setMessage("Category deleted successfully!");
+
       // Refresh data setelah penghapusan
       const updatedData = await fetchKategori();
-      setKategori(updatedData.data);
+      setKategori(updatedData);
     } catch (error) {
       console.error("Error deleting category:", error);
       setErrorMessage(error.response?.data?.message || "Failed to delete category.");
     }
   };
-
+console.log(kategori)
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       <main className="flex-grow container mx-auto p-6">
@@ -130,12 +133,11 @@ export default function ManageKategori() {
         </form>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {kategori?.map((k) => (
+          {kategori.map((k) => (
             <div key={k.kategori_id} className="bg-white shadow-lg rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
                 {k.kategori_nama}
-              </h2>
-              <p className="text-gray-700">ID: {k.kategori_id}</p> {/* Tampilkan kategori_id */}
+              </h2> 
               <div className="mt-4 flex space-x-2">
                 <button
                   className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"

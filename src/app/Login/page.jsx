@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+
 import Head from "next/head";
+import { useState } from "react";
 import axios from "axios";
 
-const AdminLogin = () => {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -22,24 +23,25 @@ const AdminLogin = () => {
 
     try {
       const response = await axios.post(
-        "https://api-elektronik-finalproject.aran8276.site/api/auth/admin/login",
+        "https://api-elektronik-finalproject.aran8276.site/api/auth/login",
         {
           email,
           password,
         }
       );
 
-      console.log("Response from API:", response.data);
+      console.log("Response dari API:", response?.data);
 
-      // Save token to localStorage
-      localStorage.setItem("adminToken", response.data.accesstoken);
+      // Simpan token ke localStorage
+      localStorage.setItem(token, response?.access_token);
+      localStorage.setItem("tedsttoken", response?.access_token);
 
       setMessage("Login successful! Redirecting...");
 
-      // Redirect to admin dashboard after success
-      setTimeout(() => {
-        window.location.href = "/AdminDashboard";
-      }, 2000);
+      // Redirect ke halaman admin setelah sukses
+      // setTimeout(() => {
+      //   window.location.href = "Home";
+      // }, 2000);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Login failed");
       setMessage("");
@@ -47,28 +49,32 @@ const AdminLogin = () => {
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen"
-      style={{
-        backgroundImage: "url('/purple.png')", // Tambahkan path ke gambar background
-        backgroundSize: "cover", // Sesuaikan ukuran gambar agar menutupi seluruh area
-        backgroundPosition: "center", // Posisikan gambar di tengah
-        backgroundRepeat: "no-repeat", // Hindari pengulangan gambar
-      }}
-    >
+    <div className="bg-gray-100 flex items-center justify-center min-h-screen">
+       <div className="absolute inset-0 z-0 pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className={`absolute w-2 h-2 rounded-full bg-purple-400 opacity-50 animate-particle-move-${i % 3}`}
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+              }}
+            ></div>
+          ))}
+        </div>
       <Head>
-        <title>Admin Login Page</title>
+        <title>Login Page</title>
       </Head>
-      <div className="flex flex-row items-center bg-white shadow-2xl rounded-lg p-8 max-w-4xl w-full space-x-8">
+      <div className="bg-white shadow-2xl rounded-lg p-8 max-w-2xl w-full relative overflow-hidden">
         <div className="flex-shrink-0">
           <img
-            src="/user.png"
-            alt="Admin Logo"
+            src="/User.png"
+            alt="User Logo"
             className="w-32 h-32 object-contain"
           />
         </div>
         <div className="flex flex-col items-center w-full">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">Admin Login</h2>
+          <h2 className="text-3xl font-bold mb-8 text-gray-900">Login</h2>
           <form className="w-full" onSubmit={handleSubmit}>
             {message && (
               <div className="mb-4 text-green-500 text-sm">{message}</div>
@@ -108,37 +114,23 @@ const AdminLogin = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                 type="submit"
               >
                 Login
               </button>
-              <a href="/auth/Forgot" className="text-blue-500 hover:underline">
-                Forgot Password?
-              </a>
             </div>
           </form>
           <p className="mt-8 text-gray-600 text-sm">
             Don't have an account?{" "}
-            <a
-              href="/auth/AdminRegister"
-              className="text-blue-500 hover:underline"
-            >
-              Register as Admin
+            <a href="SignUp" className="text-blue-500 hover:underline">
+              Sign up
             </a>
           </p>
         </div>
       </div>
-      <button
-        className="fixed bottom-4 left-4 p-2 bg-gray-300 rounded-full hover:bg-gray-400 focus:outline-none"
-        onClick={() => (window.location.href = "/auth/Login")}
-      >
-        🔙
-      </button>
     </div>
   );
-};
-
-export default AdminLogin;
+}
