@@ -45,7 +45,7 @@ export default function Alat() {
         <title>Alat List</title>
       </Head>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-purple-600 hover:to-blue-500 text-white font-bold p-6 rounded-lg mb-12 w-full text-center shadow-lg transform transition-transform duration-300">
+      <section className="bg-gradient-to-r from-blue-500 to-purple-600 from-purple-600 to-blue-500 text-white font-bold p-6 rounded-lg mb-12 w-full text-center shadow-lg">
         <h1 className="text-4xl font-bold mb-4">Our Alat</h1>
         <p className="text-xl">
           Browse through our extensive collection of alat.

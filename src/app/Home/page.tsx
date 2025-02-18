@@ -81,33 +81,32 @@ export default function Home() {
         </main>
       </div>
 
-        {/* Carousel Section */}
-        <section className="py-12">
-          <h2 className="text-4xl font-bold text-center mb-6">
-            Featured Products
-          </h2>
-          {loading && <p className="text-center">Loading...</p>}
-          {error && <p className="text-center text-red-500">{error}</p>}
-          {!loading && !error && (
-            <Carousel
-              showArrows={true}
-              showStatus={false}
-              showIndicators={false}
-              infiniteLoop={true}
-              autoPlay={true}
-              interval={3000}
-              swipeable={true}
-              emulateTouch={true}
-            >
-              {products.map((product) => (
-                <div key={product.alat_id} className="flex justify-center">
-                  <Card alat={product} />
-                </div>
-              ))}
-            </Carousel>
-          )}
-        </section>
-      </main>
+      {/* Carousel Section */}
+      <section className="py-12">
+        <h2 className="text-4xl font-bold text-center mb-6">
+          Featured Products
+        </h2>
+        {loading && <p className="text-center">Loading...</p>}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!loading && !error && (
+          <Carousel
+            showArrows={true}
+            showStatus={false}
+            showIndicators={false}
+            infiniteLoop={true}
+            autoPlay={true}
+            interval={3000}
+            swipeable={true}
+            emulateTouch={true}
+          >
+            {products.map((product) => (
+              <div key={product.alat_id} className="flex justify-center">
+                <Card alat={product} />
+              </div>
+            ))}
+          </Carousel>
+        )}
+      </section>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
-
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify"; // Import toast dari React Toastify
+import "react-toastify/dist/ReactToastify.css"; // Import CSS untuk styling
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -44,7 +45,6 @@ export default function Signup() {
 
     try {
       console.log("Mengirim data ke API:", formData);
-
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/auth/register",
         {
@@ -53,9 +53,17 @@ export default function Signup() {
           password: formData.password,
         }
       );
-
       console.log("Response dari API:", response.data);
-      setMessage("Registration successful! Redirecting to login...");
+
+      // Tampilkan notifikasi sukses menggunakan Toastify
+      toast.success("Registration successful! Redirecting to login...", {
+        position: "top-right",
+        autoClose: 2000, // Notifikasi akan hilang setelah 2 detik
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
 
       // Redirect ke halaman login setelah sukses register
       setTimeout(() => {
@@ -63,24 +71,37 @@ export default function Signup() {
       }, 2000);
     } catch (error) {
       console.error("Error dari API:", error.response?.data || error.message);
+
+      // Tampilkan notifikasi gagal menggunakan Toastify
+      toast.error(error.response?.data?.message || "Registration failed", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
       setErrorMessage(error.response?.data?.message || "Registration failed");
       setMessage("");
     }
   };
 
   return (
-<div
+    <div
       className="flex items-center justify-center min-h-screen"
       style={{
-        backgroundImage: "url('/purple.png')", // Tambahkan path ke gambar background
-        backgroundSize: "cover", // Sesuaikan ukuran gambar agar menutupi seluruh area
-        backgroundPosition: "center", // Posisikan gambar di tengah
-        backgroundRepeat: "no-repeat", // Hindari pengulangan gambar
+        backgroundImage: "url('/purple.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
-      >
-            <Head>
+    >
+      <Head>
         <title>Sign Up Page</title>
       </Head>
+
+      {/* Toast Container untuk menampilkan notifikasi */}
       <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-6 max-w-lg w-full">
         <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign Up</h2>
         {message && (
@@ -165,7 +186,7 @@ export default function Signup() {
         </form>
         <p className="mt-6 text-gray-600 text-sm">
           Already have an account?{" "}
-          <a href="Login" className="text-blue-500 hover:underline">
+          <a href="/auth/Login" className="text-blue-500 hover:underline">
             Login
           </a>
         </p>

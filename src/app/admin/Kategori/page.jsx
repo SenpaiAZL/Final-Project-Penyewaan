@@ -68,7 +68,7 @@ export default function ManageKategori() {
   };
 
   const handleEdit = (k) => {
-    setForm({ name:k.kategori_nama});
+    setForm({ name: k.kategori_nama });
     setEditId(k.kategori_id);
   };
 
@@ -82,15 +82,17 @@ export default function ManageKategori() {
       setKategori(updatedData);
     } catch (error) {
       console.error("Error deleting category:", error);
-      setErrorMessage(error.response?.data?.message || "Failed to delete category.");
+      setErrorMessage(
+        error.response?.data?.message || "Failed to delete category."
+      );
     }
   };
-console.log(kategori)
+  console.log(kategori);
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       <main className="flex-grow container mx-auto p-6">
         {/* Hero Section */}
-        <section className="bg-gray-600 text-white p-6 rounded-lg shadow-lg mb-12 w-full text-center">
+        <section className="bg-gradient-to-r from-blue-500 to-purple-600 from-purple-600 to-blue-500 text-white font-bold p-6 rounded-lg mb-12 w-full text-center shadow-lg">
           <h1 className="text-4xl font-bold mb-4">Manage Kategori</h1>
           <p className="text-xl">
             Welcome to the kategori management page. Here you can add, edit, and
@@ -134,10 +136,13 @@ console.log(kategori)
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {kategori.map((k) => (
-            <div key={k.kategori_id} className="bg-white shadow-lg rounded-lg p-6">
+            <div
+              key={k.kategori_id}
+              className="bg-white shadow-lg rounded-lg p-6"
+            >
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
                 {k.kategori_nama}
-              </h2> 
+              </h2>
               <div className="mt-4 flex space-x-2">
                 <button
                   className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
