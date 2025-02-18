@@ -50,10 +50,22 @@ export default function Login() {
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen">
+       <div className="absolute inset-0 z-0 pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className={`absolute w-2 h-2 rounded-full bg-purple-400 opacity-50 animate-particle-move-${i % 3}`}
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+              }}
+            ></div>
+          ))}
+        </div>
       <Head>
         <title>Login Page</title>
       </Head>
-      <div className="flex flex-row items-center bg-white shadow-2xl rounded-lg p-8 max-w-4xl w-full space-x-8">
+      <div className="bg-white shadow-2xl rounded-lg p-8 max-w-2xl w-full relative overflow-hidden">
         <div className="flex-shrink-0">
           <img
             src="/User.png"

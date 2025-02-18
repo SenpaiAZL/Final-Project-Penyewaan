@@ -47,3 +47,124 @@ body {
     transform: translateY(-10px);
   }
 }
+
+/* Particle Movement Animations */
+.animate-particle-move-0 {
+  animation: particleMoveSlow 5s infinite alternate ease-in-out;
+}
+
+.animate-particle-move-1 {
+  animation: particleMoveMedium 7s infinite alternate ease-in-out;
+}
+
+.animate-particle-move-2 {
+  animation: particleMoveFast 9s infinite alternate ease-in-out;
+}
+
+@keyframes particleMoveSlow {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 50px)) translateY(calc(var(--random-y, 0) * 50px));
+  }
+}
+
+@keyframes particleMoveMedium {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 100px)) translateY(calc(var(--random-y, 0) * 100px));
+  }
+}
+
+@keyframes particleMoveFast {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 150px)) translateY(calc(var(--random-y, 0) * 150px));
+  }
+}
+
+
+/* Particle Movement Animations */
+.animate-particle-move-0 {
+  animation: particleMoveSlow 5s infinite alternate ease-in-out;
+}
+
+.animate-particle-move-1 {
+  animation: particleMoveMedium 7s infinite alternate ease-in-out;
+}
+
+.animate-particle-move-2 {
+  animation: particleMoveFast 9s infinite alternate ease-in-out;
+}
+
+@keyframes particleMoveSlow {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 50px)) translateY(calc(var(--random-y, 0) * 50px));
+  }
+}
+
+@keyframes particleMoveMedium {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 100px)) translateY(calc(var(--random-y, 0) * 100px));
+  }
+}
+
+@keyframes particleMoveFast {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 150px)) translateY(calc(var(--random-y, 0) * 150px));
+  }
+}
+
+/* Particle Movement Animations */
+.animate-particle-move-0 {
+  animation: particleMoveSlow 5s infinite alternate ease-in-out;
+}
+
+.animate-particle-move-1 {
+  animation: particleMoveMedium 7s infinite alternate ease-in-out;
+}
+
+.animate-particle-move-2 {
+  animation: particleMoveFast 9s infinite alternate ease-in-out;
+}
+
+@keyframes particleMoveSlow {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 50px)) translateY(calc(var(--random-y, 0) * 50px));
+  }
+}
+
+@keyframes particleMoveMedium {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 100px)) translateY(calc(var(--random-y, 0) * 100px));
+  }
+}
+
+@keyframes particleMoveFast {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    transform: translateX(calc(var(--random-x, 0) * 150px)) translateY(calc(var(--random-y, 0) * 150px));
+  }
+}

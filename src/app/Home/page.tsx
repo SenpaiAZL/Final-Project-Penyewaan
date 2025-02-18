@@ -48,7 +48,7 @@ export default function Home() {
 
               {/* Button with Hover and Float Effect */}
               <a
-                href="/Product"
+                href="/user/Product"
                 className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-purple-600 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 animate-bounce-slow"
               >
                 Get Started
@@ -68,7 +68,7 @@ export default function Home() {
             {[...Array(30)].map((_, i) => (
               <div
                 key={i}
-                className={`absolute w-2 h-2 rounded-full bg-blue-400 opacity-50 animate-particle-move-${
+                className={`absolute w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 opacity-50 animate-particle-move-${
                   i % 3
                 }`}
                 style={{

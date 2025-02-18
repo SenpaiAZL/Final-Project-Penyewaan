@@ -69,8 +69,16 @@ export default function Signup() {
   };
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center min-h-screen py-12">
-      <Head>
+<div
+      className="flex items-center justify-center min-h-screen"
+      style={{
+        backgroundImage: "url('/purple.png')", // Tambahkan path ke gambar background
+        backgroundSize: "cover", // Sesuaikan ukuran gambar agar menutupi seluruh area
+        backgroundPosition: "center", // Posisikan gambar di tengah
+        backgroundRepeat: "no-repeat", // Hindari pengulangan gambar
+      }}
+      >
+            <Head>
         <title>Sign Up Page</title>
       </Head>
       <div className="flex flex-col items-center bg-white shadow-2xl rounded-lg p-6 max-w-lg w-full">
