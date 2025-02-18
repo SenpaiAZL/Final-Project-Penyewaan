@@ -31,22 +31,21 @@ export default function Alat() {
   };
 
   const filteredAlat = alat?.filter((item) => {
-    return (
-
-      console.log((selectedCategory === "All" || item.category === selectedCategory) &&
-      item.alat_nama.toLowerCase().includes(searchTerm.toLowerCase()))
-      // (selectedCategory === "All" || item.category === selectedCategory) &&
-      // item.alat_nama.toLowerCase().includes(searchTerm.toLowerCase())
+    return console.log(
+      (selectedCategory === "All" || item.category === selectedCategory) &&
+        item.alat_nama.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    // (selectedCategory === "All" || item.category === selectedCategory) &&
+    // item.alat_nama.toLowerCase().includes(searchTerm.toLowerCase())
   });
-console.log(alat)
+  console.log(alat);
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 p-6">
       <Head>
         <title>Alat List</title>
       </Head>
       {/* Hero Section */}
-      <section className="bg-gray-600 text-white p-6 rounded-lg shadow-lg mb-12 w-full text-center">
+      <section className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-purple-600 hover:to-blue-500 text-white font-bold p-6 rounded-lg mb-12 w-full text-center shadow-lg transform transition-transform duration-300">
         <h1 className="text-4xl font-bold mb-4">Our Alat</h1>
         <p className="text-xl">
           Browse through our extensive collection of alat.

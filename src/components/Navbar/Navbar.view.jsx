@@ -10,48 +10,59 @@ export default function NavbarView() {
   };
 
   return (
-    <header className="bg-white shadow-md fixed w-full top-0 transition duration-300 z-50">
-      <div className="container mx-auto flex justify-between items-center p-6">
+    <header className="bg-white shadow-md fixed w-full top-0 transition duration-300 z-50 relative overflow-visible">
+      {/* Content */}
+      <div className="container mx-auto flex justify-between items-center p-6 relative z-10">
         {/* Top Left: Home Link */}
         <div className="flex items-center">
           <Link href="/" passHref>
-            <p className="text-2xl font-bold text-gray-900">Voltify</p>
+            <p className="text-2xl font-bold text-gray-900 cursor-pointer">
+              Voltify
+            </p>
           </Link>
         </div>
+
         {/* Center: Home, Product, and Contact Links */}
         <nav className="flex-grow flex justify-center">
           <Link href="/Home" passHref>
-            <p className="text-gray-700 mx-4 hover:underline">Home</p>
+            <p className="text-gray-700 mx-4 hover:text-gray-900 hover:underline transition-colors duration-300">
+              Home
+            </p>
           </Link>
           <Link href="/user/Product" passHref>
-            <p className="text-gray-700 mx-4 hover:underline">Product</p>
+            <p className="text-gray-700 mx-4 hover:text-gray-900 hover:underline transition-colors duration-300">
+              Product
+            </p>
           </Link>
           <Link href="/user/Contact" passHref>
-            <p className="text-gray-700 mx-4 hover:underline">Contact</p>
+            <p className="text-gray-700 mx-4 hover:text-gray-900 hover:underline transition-colors duration-300">
+              Contact
+            </p>
           </Link>
         </nav>
+
         {/* Right: User Icon and Settings */}
         <nav className="relative flex items-center">
           <img
             src="/user.png"
             alt="User Logo"
-            className="w-8 h-8 object-contain cursor-pointer"
+            className="w-8 h-8 object-contain cursor-pointer rounded-full border-2 border-gray-300 hover:border-purple-400 transition-all duration-300"
             onClick={handleLogoClick}
           />
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
               <Link href="/user/Profile" passHref>
-                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors duration-300">
                   Profile
                 </p>
               </Link>
               <Link href="/user/Setting" passHref>
-                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors duration-300">
                   Settings
                 </p>
               </Link>
               <Link href="/auth/Login" passHref>
-                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                <p className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors duration-300">
                   Logout
                 </p>
               </Link>

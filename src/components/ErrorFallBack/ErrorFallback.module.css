@@ -1,39 +1,56 @@
+/* Container */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh; /* Menggunakan min-height agar fleksibel */
   text-align: center;
-  background-color: ;
-  color: #721c24;
-  border: 2px solid #f5c6cb;
+  background-color: #ffffff; /* Latar belakang putih */
+  color: #333333; /* Warna teks gelap */
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Efek bayangan halus */
 }
 
+/* Judul Error */
 .title {
-  font-size: 24px;
+  font-size: 2rem; /* Ukuran font besar untuk judul */
   font-weight: bold;
+  color: #4a5568; /* Warna teks abu-abu gelap */
+  margin-bottom: 16px;
 }
 
+/* Pesan Error */
 .message {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 1.25rem; /* Ukuran font sedang untuk pesan */
+  color: #718096; /* Warna teks abu-abu muda */
+  margin-bottom: 24px;
 }
 
+/* Tombol */
 .button {
-  background-color: #721c24;
+  background: linear-gradient(
+    to right,
+    #4c6ef5,
+    #63b3ed
+  ); /* Gradien biru seperti tombol di homepage */
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Transisi halus */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan tambahan */
 }
 
 .button:hover {
-  background-color: #a71d2a;
+  transform: scale(1.05); /* Efek hover zoom kecil */
+  background: linear-gradient(
+    to right,
+    #63b3ed,
+    #4c6ef5
+  ); /* Gradien berubah saat hover */
 }
