@@ -8,7 +8,7 @@ export default function Card({ alat, onClick }) {
       onClick={onClick}
     >
       <img
-        src={alat.alat_image}
+        src={alat.image}
         alt={alat.alat_nama}
         className="w-full h-40 object-cover mb-4 rounded"
       />

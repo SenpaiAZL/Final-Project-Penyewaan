@@ -270,3 +270,47 @@ export const deleteAlat = async (id) => {
   }
 };
 
+
+// Fungsi untuk fetch semua pengguna
+export const fetchUsers = async () => {
+  try {
+    const response = await apiClient.get("/pelanggan");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk membuat pengguna baru
+export const createUser = async (data) => {
+  try {
+    const response = await apiClient.post("/pelanggan", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk memperbarui pengguna
+export const updateUser = async (id, data) => {
+  try {
+    const response = await apiClient.put(`/pelanggan/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menghapus pengguna
+export const deleteUser = async (id) => {
+  try {
+    const response = await apiClient.delete(`/pelanggan/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
