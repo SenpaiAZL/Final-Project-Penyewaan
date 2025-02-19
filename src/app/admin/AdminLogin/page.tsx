@@ -47,15 +47,7 @@ const AdminLogin = () => {
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen"
-      style={{
-        backgroundImage: "url('/purple.png')", // Tambahkan path ke gambar background
-        backgroundSize: "cover", // Sesuaikan ukuran gambar agar menutupi seluruh area
-        backgroundPosition: "center", // Posisikan gambar di tengah
-        backgroundRepeat: "no-repeat", // Hindari pengulangan gambar
-      }}
-    >
+    <div className="bg-gray-100 flex items-center justify-center min-h-screen">
       <Head>
         <title>Admin Login Page</title>
       </Head>

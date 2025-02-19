@@ -11,13 +11,14 @@ import {
 
 const TambahAlat = () => {
   const [form, setForm] = useState({
-    nama: "",
-    deskripsi: "",
-    hargaPerhari: "",
-    stok: "",
-    kategori: "",
+    alat_nama: "",
+    alat_deskripsi: "",
+    alat_hargaperhari: "",
+    alat_stok: "",
+    alat_kategori_id: "",
   });
   const [alat, setAlat] = useState([]);
+  const [kategori, setKategori] = useState([]); // Initialize kategori state
   const [editId, setEditId] = useState(null);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -36,19 +37,20 @@ const TambahAlat = () => {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await fetchKategori(); // Ambil data dari API
-  //       console.log("Fetched categories:", data); // Debugging data
-  //       setKategori(data.data); // Pastikan data memiliki properti `.data`
-  //     } catch (error) {
-  //       console.error("Failed to fetch categories:", error);
-  //       setErrorMessage("Failed to load categories.");
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  // Fetch kategori saat halaman dimuat
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchKategori(); // Ambil data dari API
+        console.log("Fetched categories:", data); // Debugging data
+        setKategori(data.data); // Pastikan data memiliki properti .data
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setErrorMessage("Failed to load categories.");
+      }
+    };
+    fetchData();
+  }, []);
 
   // Handle perubahan input form
   const handleChange = (e) => {
@@ -79,11 +81,11 @@ const TambahAlat = () => {
 
       // Reset form
       setForm({
-        nama: "",
-        deskripsi: "",
-        hargaPerhari: "",
-        stok: "",
-        kategori: "",
+        alat_nama: "",
+        alat_deskripsi: "",
+        alat_hargaperhari: "",
+        alat_stok: "",
+        alat_kategori_id: "",
       });
       setEditId(null);
     } catch (error) {
@@ -91,6 +93,15 @@ const TambahAlat = () => {
       setErrorMessage(error.response?.data?.message || "An error occurred.");
       setMessage("");
     }
+  };
+
+  const getKategoriNama = (kategoriId) => {
+    const kategoriItem = kategori.find(
+      (k) => String(k.kategori_id) === String(kategoriId)
+    );
+    return kategoriItem
+      ? kategoriItem.kategori_nama
+      : "Kategori Tidak Ditemukan";
   };
 
   // Handle edit alat
@@ -148,11 +159,11 @@ const TambahAlat = () => {
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="nama"
-              name="nama"
+              id="alat_nama"
+              name="alat_nama"
               type="text"
               placeholder="Nama Alat"
-              value={form.nama}
+              value={form.alat_nama}
               onChange={handleChange}
             />
           </div>
@@ -166,11 +177,11 @@ const TambahAlat = () => {
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="deskripsi"
-              name="deskripsi"
+              id="alat_deskripsi"
+              name="alat_deskripsi"
               type="text"
               placeholder="Deskripsi Alat"
-              value={form.deskripsi}
+              value={form.alat_deskripsi}
               onChange={handleChange}
             />
           </div>
@@ -184,11 +195,11 @@ const TambahAlat = () => {
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="hargaPerhari"
-              name="hargaPerhari"
+              id="alat_hargaperhari"
+              name="alat_hargaperhari"
               type="number"
               placeholder="Harga Perhari"
-              value={form.hargaPerhari}
+              value={form.alat_hargaperhari}
               onChange={handleChange}
             />
           </div>
@@ -202,29 +213,15 @@ const TambahAlat = () => {
             </label>
             <input
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="stok"
-              name="stok"
+              id="alat_stok"
+              name="alat_stok"
               type="number"
               placeholder="Stok"
-              value={form.stok}
+              value={form.alat_stok}
               onChange={handleChange}
             />
           </div>
 
-          {/* <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="kategori">
-              Kategori
-            </label>
-            <input
-              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="kategori"
-              name="kategori"
-              type="text"
-              placeholder="Kategori"
-              value={form.kategori}
-              onChange={handleChange}
-            />
-          // </div> */}
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -263,9 +260,13 @@ const TambahAlat = () => {
                 {a.alat_nama}
               </h2>
               <p className="text-gray-700">Deskripsi: {a.alat_deskripsi}</p>
-              {/* <p className="text-gray-700">Harga Perhari: Rp {a.hargaPerhari.toLocaleString()}</p> */}
+              <p className="text-gray-700">
+                Harga Perhari: Rp {a.alat_hargaperhari.toLocaleString()}
+              </p>
               <p className="text-gray-700">Stok: {a.alat_stok}</p>
-              <p className="text-gray-700">Kategori: {a.kategori_alat}</p>
+              <p className="text-gray-700">
+                Kategori: {getKategoriNama(a.alat_kategori_id)}
+              </p>
 
               <div className="mt-4 flex space-x-2">
                 <button
