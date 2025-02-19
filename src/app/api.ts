@@ -170,17 +170,6 @@ export const reset =async(email, token, password, password_confirmation)=>{
   
 };
 
-// export const fetchSewa = async () => {
-//   try {
-//     const response = (await apiClient.get("/penyewaan" ));
-//     return response?.data;
-//   } catch (error) {
-//     console.error("Error fetching alat:", error);
-//     throw error;
-//   }
-// };
-
-
 // Fungsi untuk fetch semua kategori
 export const fetchKategori = async () => {
   try {
@@ -311,6 +300,95 @@ export const deleteUser = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting user:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk fetch semua penyewaan
+export const fetchPenyewaan = async () => {
+  try {
+    const response = await apiClient.get("/penyewaan");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching penyewaan:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk membuat penyewaan baru
+export const createPenyewaan = async (data) => {
+  try {
+    const response = await apiClient.post("/penyewaan", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating penyewaan:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk memperbarui penyewaan
+export const updatePenyewaan = async (id, data) => {
+  try {
+    const response = await apiClient.put(`/penyewaan/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating penyewaan:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menghapus penyewaan
+export const deletePenyewaan = async (id) => {
+  try {
+    const response = await apiClient.delete(`/penyewaan/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting penyewaan:", error);
+    throw error;
+  }
+};
+
+
+// Fungsi untuk fetch semua penyewaan_detail
+export const fetchPenyewaanDetail = async () => {
+  try {
+    const response = await apiClient.get("/penyewaan_detail");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching penyewaan_detail:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk membuat penyewaan_detail baru
+export const createPenyewaanDetail = async (data) => {
+  try {
+    const response = await apiClient.post("/penyewaan_detail", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating penyewaan_detail:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk memperbarui penyewaan_detail
+export const updatePenyewaanDetail = async (id, data) => {
+  try {
+    const response = await apiClient.put(`/penyewaan_detail/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating penyewaan_detail:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menghapus penyewaan_detail
+export const deletePenyewaanDetail = async (id) => {
+  try {
+    const response = await apiClient.delete(`/penyewaan_detail/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting penyewaan_detail:", error);
     throw error;
   }
 };

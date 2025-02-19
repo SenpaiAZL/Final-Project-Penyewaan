@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaEdit, FaTrash } from "react-icons/fa";
 
 export default function DisplayData() {
   const [penyewaanData, setPenyewaanData] = useState([]);
@@ -53,6 +53,34 @@ export default function DisplayData() {
     setItemData(items);
   }, []);
 
+  // Edit function
+  const handleEdit = (id, type) => {
+    if (type === "penyewaan") {
+      const itemToEdit = penyewaanData.find((data) => data.idPelanggan === id);
+      console.log("Editing Penyewaan Item: ", itemToEdit);
+      // Implement your edit logic here
+    } else if (type === "item") {
+      const itemToEdit = itemData.find((data) => data.id === id);
+      console.log("Editing Item: ", itemToEdit);
+      // Implement your edit logic here
+    }
+  };
+
+  // Delete function
+  const handleDelete = (id, type) => {
+    if (type === "penyewaan") {
+      const updatedPenyewaanData = penyewaanData.filter(
+        (data) => data.idPelanggan !== id
+      );
+      setPenyewaanData(updatedPenyewaanData);
+      console.log("Deleted Penyewaan Item with ID: ", id);
+    } else if (type === "item") {
+      const updatedItemData = itemData.filter((data) => data.id !== id);
+      setItemData(updatedItemData);
+      console.log("Deleted Item with ID: ", id);
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       <main className="flex-grow container mx-auto p-6">
@@ -75,6 +103,7 @@ export default function DisplayData() {
                   <th className="py-2">Status Pembayaran</th>
                   <th className="py-2">Status Pengembalian</th>
                   <th className="py-2">Total Harga</th>
+                  <th className="py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,6 +115,20 @@ export default function DisplayData() {
                     <td className="py-2">{data.statusPembayaran}</td>
                     <td className="py-2">{data.statusPengembalian}</td>
                     <td className="py-2">{data.totalHarga}</td>
+                    <td className="py-2 flex justify-around">
+                      <button
+                        onClick={() => handleEdit(data.idPelanggan, "penyewaan")}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(data.idPelanggan, "penyewaan")}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -105,6 +148,7 @@ export default function DisplayData() {
                   <th className="py-2">Alat</th>
                   <th className="py-2">Jumlah</th>
                   <th className="py-2">Sub Harga</th>
+                  <th className="py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,6 +159,20 @@ export default function DisplayData() {
                     <td className="py-2">{data.alat}</td>
                     <td className="py-2">{data.jumlah}</td>
                     <td className="py-2">{data.subHarga}</td>
+                    <td className="py-2 flex justify-around">
+                      <button
+                        onClick={() => handleEdit(data.id, "item")}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(data.id, "item")}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -122,7 +180,7 @@ export default function DisplayData() {
           </div>
         </section>
 
-        <Link href="/admin/dashboard">
+        <Link href="/admin/Penyewaan">
           <p className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 mt-4">
             <FaArrowLeft className="mr-2 inline" /> Back
           </p>

@@ -14,8 +14,11 @@ export default function AdminDashboard() {
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       {/* Main Content */}
       <main className="flex-grow container mx-auto p-4">
+        {" "}
+        {/* Mengurangi padding dari p-6 menjadi p-4 */}
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold p-6 rounded-lg mb-8 w-full text-center shadow-lg -mt-4">
+          {/* Menambahkan -mt-4 untuk margin top negatif */}
           <h1 className="text-4xl font-bold mb-5">Our Alat</h1>
           <p className="text-xl">
             Browse through our extensive collection of alat.
@@ -37,6 +40,7 @@ export default function AdminDashboard() {
               </p>
             </div>
           </Link>
+
           {/* Manage Products */}
           <Link href="/admin/Penyewaan" legacyBehavior passHref>
             <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-green-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
@@ -51,6 +55,7 @@ export default function AdminDashboard() {
               </p>
             </div>
           </Link>
+
           {/* View Orders */}
           <Link href="/admin/Kategori" legacyBehavior passHref>
             <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-yellow-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
@@ -65,6 +70,7 @@ export default function AdminDashboard() {
               </p>
             </div>
           </Link>
+
           {/* Alat */}
           <Link href="/admin/Alat" legacyBehavior passHref>
             <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
@@ -79,10 +85,11 @@ export default function AdminDashboard() {
               </p>
             </div>
           </Link>
+
           {/* Manage Settings */}
           <Link href="/admin/Configure" legacyBehavior passHref>
-            <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
-              <div className="flex items-center justify-center bg-orange-100 text-orange-600 w-12 h-12 rounded-full mb-4 mx-auto">
+            <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-red-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+              <div className="flex items-center justify-center bg-red-100 text-red-600 w-12 h-12 rounded-full mb-4 mx-auto">
                 <FaCog size={24} />
               </div>
               <h2 className="text-2xl font-bold mb-4 text-gray-900 text-center">
@@ -93,8 +100,9 @@ export default function AdminDashboard() {
               </p>
             </div>
           </Link>
-          {/* Manage Admin Settings */}
-          <Link href="/user/Profile" legacyBehavior passHref>
+
+          {/* Admin Account Center */}
+          <Link href="/admin/AdminProfil" legacyBehavior passHref>
             <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-teal-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
               <div className="flex items-center justify-center bg-teal-100 text-teal-600 w-12 h-12 rounded-full mb-4 mx-auto">
                 <FaUserShield size={24} />

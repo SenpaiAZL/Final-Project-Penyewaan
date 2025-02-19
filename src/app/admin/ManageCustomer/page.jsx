@@ -207,7 +207,8 @@ export default function ManageCustomers() {
             >
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
                 {customer.pelanggan_nama}
-              </h2>
+              </h2> 
+              <p className="text-gray-600">ID: {customer.pelanggan_id}</p>
               <p className="text-gray-700">Email: {customer.pelanggan_email}</p>
               <p className="text-gray-700">
                 Alamat: {customer.pelanggan_alamat}
