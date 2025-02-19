@@ -2,7 +2,7 @@
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify"; // Import toast dari React Toastify
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer dan toast
 import "react-toastify/dist/ReactToastify.css"; // Import CSS untuk styling
 
 export default function Login() {
@@ -13,8 +13,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
+    setErrorMessage(""); // Reset error message
     setMessage("Loading...");
+
     if (!email || !password) {
       setErrorMessage("Please fill in all fields.");
       setMessage("");
@@ -68,7 +69,8 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div className="bg-gray-100 flex items-center justify-center min-h-screen relative">
+      {/* Partikel animasi */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {[...Array(20)].map((_, i) => (
           <div
@@ -83,6 +85,7 @@ export default function Login() {
           ></div>
         ))}
       </div>
+
       <Head>
         <title>Login Page</title>
       </Head>
@@ -93,67 +96,87 @@ export default function Login() {
           <img
             src="/User.png"
             alt="User Logo"
-            className="w-32 h-32 object-contain"
+            className="w-32 h-32 object-contain mx-auto"
           />
         </div>
-        <div className="flex flex-col items-center w-full">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">Login</h2>
-          <form className="w-full" onSubmit={handleSubmit}>
-            {message && (
-              <div className="mb-4 text-green-500 text-sm">{message}</div>
-            )}
-            {errorMessage && (
-              <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
-            )}
-            <div className="mb-6">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email"
-              >
-                Email
-              </label>
-              <input
-                className="shadow-md appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                id="email"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+          Login
+        </h2>
+
+        <form className="w-full" onSubmit={handleSubmit}>
+          {/* Pesan status */}
+          {message && (
+            <div className="mb-4 text-green-500 text-sm text-center">
+              {message}
             </div>
-            <div className="mb-6">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="password"
-              >
-                Password
-              </label>
-              <input
-                className="shadow-md appearance-none border rounded w-full py-3 px-4 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                id="password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+          )}
+          {errorMessage && (
+            <div className="mb-4 text-red-500 text-sm text-center">
+              {errorMessage}
             </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                type="submit"
-              >
-                Login
-              </button>
-            </div>
-          </form>
-          <p className="mt-8 text-gray-600 text-sm">
-            Don't have an account?{" "}
-            <a href="/SignUp" className="text-blue-500 hover:underline">
-              Sign up
-            </a>
-          </p>
-        </div>
+          )}
+
+          {/* Input Email */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              className="shadow-md appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Input Password */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="shadow-md appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Tombol Login */}
+          <div className="flex items-center justify-center">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="submit"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+
+        {/* Link Sign Up */}
+        <p className="mt-8 text-gray-600 text-sm text-center">
+          Don't have an account?{" "}
+          <a href="/SignUp" className="text-blue-500 hover:underline">
+            Sign up
+          </a>
+        </p>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer />
     </div>
   );
 }

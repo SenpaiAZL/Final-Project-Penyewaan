@@ -98,7 +98,7 @@ export default function AdminDashboard() {
             </div>
           </Link>
           {/* Manage Admin Settings */}
-          <Link href="/Profile" passHref>
+          <Link href="/user/Profile" passHref>
             <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-2xl font-bold mb-4 text-gray-900">
                 Admin Account center
