@@ -282,6 +282,7 @@ export default function AddPenyewaan() {
               <thead>
                 <tr className="bg-gray-200">
                   <th className="p-3 text-left">ID Pelanggan</th>
+                  <th className="p-3 text-left">ID Penyewaan</th>
                   <th className="p-3 text-left">Tanggal Sewa</th>
                   <th className="p-3 text-left">Tanggal Kembali</th>
                   <th className="p-3 text-left">Status Pembayaran</th>
@@ -294,6 +295,7 @@ export default function AddPenyewaan() {
                 {penyewaanList.map((penyewaan) => (
                   <tr key={penyewaan.penyewaan_id} className="border-b">
                     <td className="p-3">{penyewaan.penyewaan_pelanggan_id}</td>
+                    <td className="p-3">{penyewaan.penyewaan_id}</td>
                     <td className="p-3">
                       {new Date(penyewaan.penyewaan_tglsewa).toLocaleDateString()}
                     </td>

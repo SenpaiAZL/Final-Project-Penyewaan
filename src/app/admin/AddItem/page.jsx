@@ -4,6 +4,10 @@ import Link from "next/link";
 import {
   createPenyewaanDetail,
   fetchPenyewaanDetail,
+  updatePenyewaanDetail,
+  deletePenyewaanDetail,
+  fetchPenyewaan,
+  fetchAlat,
 } from "@/app/api"; // Import fungsi API
 import {
   FaIdBadge,
@@ -23,20 +27,29 @@ export default function AddItem() {
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
   const [penyewaanList, setPenyewaanList] = useState([]); // State untuk menyimpan data penyewaan_detail
+  const [penyewaanOptions, setPenyewaanOptions] = useState([]); // State untuk menyimpan daftar penyewaan
+  const [alatOptions, setAlatOptions] = useState([]); // State untuk menyimpan daftar alat
 
-  // Fetch data penyewaan_detail saat komponen dimuat
+  // Fetch data penyewaan_detail, penyewaan, dan alat saat komponen dimuat
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchPenyewaanDetail();
-          setPenyewaanList(data.data);
-      
+        // Fetch data penyewaan_detail
+        const detailData = await fetchPenyewaanDetail();
+        setPenyewaanList(detailData.data);
+
+        // Fetch data penyewaan
+        const penyewaanData = await fetchPenyewaan();
+        setPenyewaanOptions(penyewaanData.data);
+
+        // Fetch data alat
+        const alatData = await fetchAlat();
+        setAlatOptions(alatData.data);
       } catch (error) {
-        console.error("Error fetching penyewaan_detail:", error);
+        console.error("Error fetching data:", error);
         setPenyewaanList([]);
-        const data = await fetchPenyewaanDetail();
-  
-        setPenyewaanList(data.data);
+        setPenyewaanOptions([]);
+        setAlatOptions([]);
       }
     };
     fetchData();
@@ -94,6 +107,56 @@ export default function AddItem() {
     }
   };
 
+  
+  // Fungsi untuk handle edit
+  const handleEdit = async (id) => {
+    console.log("Edit button clicked, ID:", id); // Debugging
+  
+    try {
+      const itemToEdit = penyewaanList.find((item) => item.penyewaan_detail_id === id);
+      
+      if (!itemToEdit) {
+        setErrorMessage("Item not found.");
+        return;
+      }
+  
+      console.log("Item to edit:", itemToEdit); // Debugging
+  
+      await updatePenyewaanDetail(id, {
+        penyewaan_detail_penyewaan_id: itemToEdit.penyewaan_detail_penyewaan_id,
+        penyewaan_detail_alat_id: itemToEdit.penyewaan_detail_alat_id,
+        penyewaan_detail_jumlah: itemToEdit.penyewaan_detail_jumlah,
+        penyewaan_detail_subharga: itemToEdit.penyewaan_detail_subharga,
+      });
+  
+      setMessage("Item updated successfully!");
+  
+      const updatedData = await fetchPenyewaanDetail();
+      console.log("Updated data received:", updatedData.data);
+      setPenyewaanList(updatedData.data);
+    } catch (error) {
+      console.error("Error editing item:", error);
+      setErrorMessage(error.response?.data?.message || "An error occurred.");
+    }
+  };
+
+  // Fungsi untuk handle delete
+  const handleDelete = async (id) => {
+    try {
+      // Kirim permintaan delete ke API
+      await deletePenyewaanDetail(id);
+
+      setMessage("Item deleted successfully!");
+
+      // Muat ulang data penyewaan_detail
+      const updatedData = await fetchPenyewaanDetail();
+      setPenyewaanList(updatedData.data);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      setErrorMessage(error.response?.data?.message || "An error occurred.");
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       <main className="flex-grow container mx-auto p-6">
@@ -115,29 +178,51 @@ export default function AddItem() {
           )}
 
           {/* ID Penyewaan */}
-          <div className="mb-4 flex items-center">
-            <FaIdBadge className="mr-2 text-blue-500" />
-            <input
+          <div className="mb-4 flex flex-col">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="penyewaan_detail_penyewaan_id"
+            >
+              Pilih Penyewaan ID
+            </label>
+            <select
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              type="text"
+              id="penyewaan_detail_penyewaan_id"
               name="penyewaan_detail_penyewaan_id"
-              placeholder="ID Penyewaan"
               value={form.penyewaan_detail_penyewaan_id}
               onChange={handleChange}
-            />
+            >
+              <option value="">-- Pilih Penyewaan --</option>
+              {penyewaanOptions.map((penyewaan) => (
+                <option key={penyewaan.penyewaan_id} value={penyewaan.penyewaan_id}>
+                  {penyewaan.penyewaan_id}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* ID Alat */}
-          <div className="mb-4 flex items-center">
-            <FaLaptop className="mr-2 text-blue-500" />
-            <input
+          <div className="mb-4 flex flex-col">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="penyewaan_detail_alat_id"
+            >
+              Pilih Alat ID
+            </label>
+            <select
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              type="text"
+              id="penyewaan_detail_alat_id"
               name="penyewaan_detail_alat_id"
-              placeholder="ID Alat"
               value={form.penyewaan_detail_alat_id}
               onChange={handleChange}
-            />
+            >
+              <option value="">-- Pilih Alat --</option>
+              {alatOptions.map((alat) => (
+                <option key={alat.alat_id} value={alat.alat_id}>
+                  {alat.alat_id}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Jumlah */}
@@ -233,13 +318,3 @@ export default function AddItem() {
     </div>
   );
 }
-
-// Fungsi untuk handle edit (dummy)
-const handleEdit = (id) => {
-  console.log("Edit item with ID:", id);
-};
-
-// Fungsi untuk handle delete (dummy)
-const handleDelete = (id) => {
-  console.log("Delete item with ID:", id);
-};
