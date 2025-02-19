@@ -87,9 +87,12 @@ export default function AdminDashboard() {
           </Link>
 
           {/* Manage Settings */}
-          <Link href="/admin/Configure" passHref>
-            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900">
+          <Link href="/admin/Configure" legacyBehavior passHref>
+            <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-red-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+              <div className="flex items-center justify-center bg-red-100 text-red-600 w-12 h-12 rounded-full mb-4 mx-auto">
+                <FaCog size={24} />
+              </div>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 text-center">
                 Manage Settings
               </h2>
               <p className="text-gray-700 text-center">
@@ -97,11 +100,15 @@ export default function AdminDashboard() {
               </p>
             </div>
           </Link>
-          {/* Manage Admin Settings */}
-          <Link href="/user/Profile" passHref>
-            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900">
-                Admin Account center
+
+          {/* Admin Account Center */}
+          <Link href="/user/Profile" legacyBehavior passHref>
+            <div className="group bg-white shadow-lg rounded-lg p-6 hover:bg-teal-50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+              <div className="flex items-center justify-center bg-teal-100 text-teal-600 w-12 h-12 rounded-full mb-4 mx-auto">
+                <FaUserShield size={24} />
+              </div>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 text-center">
+                Admin Account Center
               </h2>
               <p className="text-gray-700 text-center">
                 Read every account registered as admin.

@@ -15,7 +15,7 @@ export default function NavbarView() {
       <div className="container mx-auto flex justify-between items-center p-6 relative z-10">
         {/* Top Left: Home Link */}
         <div className="flex items-center">
-          <Link href="/" passHref>
+          <Link href="/admin/AdminDashboard " passHref>
             <p className="text-2xl font-bold text-gray-900 cursor-pointer">
               Admin Dashboard
             </p>

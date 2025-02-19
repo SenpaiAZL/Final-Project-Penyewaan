@@ -170,17 +170,6 @@ export const reset =async(email, token, password, password_confirmation)=>{
   
 };
 
-// export const fetchSewa = async () => {
-//   try {
-//     const response = (await apiClient.get("/penyewaan" ));
-//     return response?.data;
-//   } catch (error) {
-//     console.error("Error fetching alat:", error);
-//     throw error;
-//   }
-// };
-
-
 // Fungsi untuk fetch semua kategori
 export const fetchKategori = async () => {
   try {

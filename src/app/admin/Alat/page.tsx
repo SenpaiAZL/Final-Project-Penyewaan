@@ -96,12 +96,8 @@ const TambahAlat = () => {
   };
 
   const getKategoriNama = (kategoriId) => {
-    const kategoriItem = kategori.find(
-      (k) => String(k.kategori_id) === String(kategoriId)
-    );
-    return kategoriItem
-      ? kategoriItem.kategori_nama
-      : "Kategori Tidak Ditemukan";
+    const kategoriItem = kategori.find((k) => String(k.kategori_id) === String(kategoriId));
+    return kategoriItem ? kategoriItem.kategori_nama : 'Kategori Tidak Ditemukan';
   };
 
   // Handle edit alat
@@ -225,15 +221,15 @@ const TambahAlat = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="kategori"
+              htmlFor="statusPembayaran"
             >
               Pilih Kategori
             </label>
             <select
               className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-              id="alat_kategori_id"
-              name="alat_kategori_id"
-              value={form.alat_kategori_id}
+              id="statusPembayaran"
+              name="kategori"
+              value={form.kategori}
               onChange={handleChange}
             >
               <option value="">-- Pilih Kategori --</option>
@@ -244,7 +240,6 @@ const TambahAlat = () => {
               ))}
             </select>
           </div>
-
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             type="submit"
@@ -255,19 +250,15 @@ const TambahAlat = () => {
 
         {/* List Alat */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {alat?.map((a) => (
-            <div key={a.alat_id} className="bg-white shadow-lg rounded-lg p-6">
+          {alat.map((a) => (
+            <div key={a.id} className="bg-white shadow-lg rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
                 {a.alat_nama}
               </h2>
               <p className="text-gray-700">Deskripsi: {a.alat_deskripsi}</p>
-              <p className="text-gray-700">
-                Harga Perhari: Rp {a.alat_hargaperhari.toLocaleString()}
-              </p>
+              <p className="text-gray-700">Harga Perhari: Rp {a.alat_hargaperhari.toLocaleString()}</p>
               <p className="text-gray-700">Stok: {a.alat_stok}</p>
-              <p className="text-gray-700">
-                Kategori: {getKategoriNama(a.alat_kategori_id)}
-              </p>
+              <p className="text-gray-700">Kategori: {getKategoriNama(a.alat_kategori_id)}</p>
 
               <div className="mt-4 flex space-x-2">
                 <button
