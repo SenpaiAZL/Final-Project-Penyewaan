@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar/Navbar";
 import AdminNavbar from "@/components/NavbarAdmin/NavbarAdmin.view";
 import "./globals.css";
 import NavbarAdminView from "@/components/NavbarAdmin/NavbarAdmin.view";
-import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -36,13 +35,11 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <main>
-          <ToastContainer />
-          <ToastContainer />
-          <Navbar />
+        <Navbar />
           {children}
-          <Footer />
+          <Footer/>
         </main>
       </body>
     </html>
   );
-}
+} 
