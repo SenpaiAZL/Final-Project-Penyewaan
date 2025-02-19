@@ -96,21 +96,20 @@ const TambahAlat = () => {
   };
 
   const getKategoriNama = (kategoriId) => {
-    const kategoriItem = kategori.find((k) => String(k.kategori_id) === String(kategoriId));
-    return kategoriItem ? kategoriItem.kategori_nama : 'Kategori Tidak Ditemukan';
+    const kategoriItem = kategori.find(
+      (k) => String(k.kategori_id) === String(kategoriId)
+    );
+    return kategoriItem
+      ? kategoriItem.kategori_nama
+      : "Kategori Tidak Ditemukan";
   };
 
   // Handle edit alat
   const handleEdit = (a) => {
-    console.log("Editing alat:", a); // Debugging
-    setEditId(a.alat_id); // Pastikan ini alat_id, bukan id
-    setForm({
-      alat_nama: a.alat_nama,
-      alat_deskripsi: a.alat_deskripsi,
-      alat_hargaperhari: a.alat_hargaperhari,
-      alat_stok: a.alat_stok,
-      alat_kategori_id: a.alat_kategori_id,
-    });
+    setEditId(a.id);
+    setForm(a);
+    setMessage("");
+    setErrorMessage("");
   };
 
   // Handle delete alat
@@ -224,27 +223,27 @@ const TambahAlat = () => {
           </div>
 
           <div className="mb-4">
-          <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="kategori"
-          >
-           Pilih Kategori
-          </label>
-          <select
-          className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-          id="alat_kategori_id"
-          name="alat_kategori_id"
-          value={form.alat_kategori_id}
-          onChange={handleChange}
-          >
-         <option value="">-- Pilih Kategori --</option>
-         {kategori?.map((k) => (
-         <option key={k.kategori_id} value={k.kategori_id}>
-         {k.kategori_nama}
-        </option>
-        ))}
-       </select>
-       </div>
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="kategori"
+            >
+              Pilih Kategori
+            </label>
+            <select
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              id="alat_kategori_id"
+              name="alat_kategori_id"
+              value={form.alat_kategori_id}
+              onChange={handleChange}
+            >
+              <option value="">-- Pilih Kategori --</option>
+              {kategori?.map((k) => (
+                <option key={k.kategori_id} value={k.kategori_id}>
+                  {k.kategori_nama}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -262,9 +261,13 @@ const TambahAlat = () => {
                 {a.alat_nama}
               </h2>
               <p className="text-gray-700">Deskripsi: {a.alat_deskripsi}</p>
-              <p className="text-gray-700">Harga Perhari: Rp {a.alat_hargaperhari.toLocaleString()}</p>
+              <p className="text-gray-700">
+                Harga Perhari: Rp {a.alat_hargaperhari.toLocaleString()}
+              </p>
               <p className="text-gray-700">Stok: {a.alat_stok}</p>
-              <p className="text-gray-700">Kategori: {getKategoriNama(a.alat_kategori_id)}</p>
+              <p className="text-gray-700">
+                Kategori: {getKategoriNama(a.alat_kategori_id)}
+              </p>
 
               <div className="mt-4 flex space-x-2">
                 <button

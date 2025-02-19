@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify"; // Import Toastify
+import "react-toastify/dist/ReactToastify.css"; // Import CSS untuk styling
 
 const AdminLogin = () => {
   const [username, setUsername] = useState("");
@@ -13,13 +15,11 @@ const AdminLogin = () => {
     e.preventDefault();
     setErrorMessage("");
     setMessage("Loading...");
-
     if (!username || !password) {
       setErrorMessage("Please fill in all fields.");
       setMessage("");
       return;
     }
-
     try {
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/admin/login",
@@ -33,13 +33,21 @@ const AdminLogin = () => {
           },
         }
       );
-
       console.log("Response from API:", response.data);
 
       // Simpan token ke localStorage
       localStorage.setItem("adminToken", response.data.accesstoken);
 
-      setMessage("Login successful! Redirecting...");
+      // Tampilkan notifikasi sukses menggunakan Toastify
+      toast.success("Login successful! Redirecting...", {
+        position: "top-right",
+        autoClose: 2000, // Notifikasi akan hilang setelah 2 detik
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
       setTimeout(() => {
         window.location.href = "/admin/AdminDashboard";
       }, 2000);
@@ -47,6 +55,16 @@ const AdminLogin = () => {
       console.error("Error from API:", error.response?.data || error.message);
       setErrorMessage(error.response?.data?.message || "Login failed");
       setMessage("");
+
+      // Tampilkan notifikasi gagal menggunakan Toastify
+      toast.error("Login failed. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -54,15 +72,19 @@ const AdminLogin = () => {
     <div
       className="flex items-center justify-center min-h-screen"
       style={{
-        backgroundImage: "url('/purple.png')", // Tambahkan path ke gambar background
-        backgroundSize: "cover", // Sesuaikan ukuran gambar agar menutupi seluruh area
-        backgroundPosition: "center", // Posisikan gambar di tengah
-        backgroundRepeat: "no-repeat", // Hindari pengulangan gambar
+        backgroundImage: "url('/purple.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <Head>
         <title>Admin Login Page</title>
       </Head>
+
+      {/* Toast Container untuk menampilkan notifikasi */}
+      <ToastContainer />
+
       <div className="flex flex-row items-center bg-white shadow-2xl rounded-lg p-8 max-w-4xl w-full space-x-8">
         <div className="flex-shrink-0">
           <img

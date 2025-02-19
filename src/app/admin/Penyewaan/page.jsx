@@ -1,261 +1,290 @@
-// "use client";
-// import { useState, useEffect } from "react";
-// import {
-//   fetchPenyewaan,
-//   createPenyewaan,
-//   updatePenyewaan,
-//   deletePenyewaan,
-// } from "@/app/api";
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import {
+  FaUser,
+  FaLaptop,
+  FaCalendarAlt,
+  FaMoneyCheckAlt,
+  FaExchangeAlt,
+  FaTrashAlt,
+  FaEdit,
+} from "react-icons/fa";
 
-// export default function ManagePenyewaan() {
-//   const [penyewaan, setPenyewaan] = useState([]); // Default ke array kosong
-//   const [loading, setLoading] = useState(true);
-//   const [form, setForm] = useState({
-//     name: "",
-//     tanggalSewa: "",
-//     tanggalKembali: "",
-//     statusPembayaran: "",
-//     statusPengembalian: "",
-//     totalHarga: "",
-//   });
-//   const [editId, setEditId] = useState(null);
-//   const [errorMessage, setErrorMessage] = useState("");
-//   const [message, setMessage] = useState("");
+export default function ManagePenyewaan() {
+  // Initial dummy penyewaan data
+  const [penyewaan, setPenyewaan] = useState([
+    {
+      id: 1,
+      name: "John Doe",
+      item: "Laptop",
+      tanggalSewa: "2023-04-01",
+      tanggalKembali: "2023-04-10",
+      statusPembayaran: "Lunas",
+      statusPengembalian: "Belum Kembali",
+      totalHarga: 1000000,
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      item: "Projector",
+      tanggalSewa: "2023-04-02",
+      tanggalKembali: "2023-04-09",
+      statusPembayaran: "Belum Dibayar",
+      statusPengembalian: "Kembali",
+      totalHarga: 500000,
+    },
+  ]);
 
-//   // Fetch data penyewaan saat komponen dimuat
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const data = await fetchPenyewaan();
-//         console.log("Data fetched:", data); // ⬅️ Debugging
+  const [form, setForm] = useState({
+    name: "",
+    item: "",
+    tanggalSewa: "",
+    tanggalKembali: "",
+    statusPembayaran: "",
+    statusPengembalian: "",
+    totalHarga: "",
+  });
+  const [editId, setEditId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
-//         // Validasi apakah data adalah array
-//         if (Array.isArray(data)) {
-//           setPenyewaan(data);
-//         } else if (data && typeof data === "object") {
-//           // Jika data adalah objek tunggal, konversi ke array
-//           setPenyewaan([data]);
-//         } else {
-//           console.error("API did not return valid data:", data);
-//           setPenyewaan([]); // Tetapkan sebagai array kosong jika data tidak valid
-//         }
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//         setErrorMessage("Failed to load penyewaan data.");
-//       } finally {
-//         setLoading(false); // Hentikan loading state
-//       }
-//     };
-//     fetchData();
-//   }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
-//   // Handle input changes
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setForm({ ...form, [name]: value });
-//   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setMessage("Loading...");
+    setErrorMessage("");
 
-//   // Handle form submission
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setMessage("Processing...");
-//     setErrorMessage("");
+    if (
+      !form.name ||
+      !form.item ||
+      !form.tanggalSewa ||
+      !form.tanggalKembali ||
+      !form.statusPembayaran ||
+      !form.statusPengembalian ||
+      !form.totalHarga
+    ) {
+      setErrorMessage("Please fill in all fields.");
+      setMessage("");
+      return;
+    }
 
-//     // Validasi form
-//     if (
-//       !form.name ||
-//       !form.tanggalSewa ||
-//       !form.tanggalKembali ||
-//       !form.statusPembayaran ||
-//       !form.statusPengembalian ||
-//       !form.totalHarga
-//     ) {
-//       setErrorMessage("Please fill in all fields.");
-//       setMessage("");
-//       return;
-//     }
+    if (editId) {
+      // Update penyewaan
+      const updatedPenyewaan = penyewaan.map((p) =>
+        p.id === editId ? { ...p, ...form } : p
+      );
+      setPenyewaan(updatedPenyewaan);
+      setMessage("Penyewaan updated successfully!");
+    } else {
+      // Create penyewaan
+      const newPenyewaan = {
+        id: penyewaan.length + 1,
+        ...form,
+      };
+      setPenyewaan([...penyewaan, newPenyewaan]);
+      setMessage("Penyewaan added successfully!");
+    }
 
-//     try {
-//       const dataToSend = {
-//         penyewaan_pelanggan_id: form.name,
-//         penyewaan_tglsewa: form.tanggalSewa,
-//         penyewaan_tglkembali: form.tanggalKembali,
-//         penyewaan_sttspembayaran: form.statusPembayaran,
-//         penyewaan_sttskembali: form.statusPengembalian,
-//         penyewaan_totalharga: Number(form.totalHarga),
-//       };
+    setForm({
+      name: "",
+      item: "",
+      tanggalSewa: "",
+      tanggalKembali: "",
+      statusPembayaran: "",
+      statusPengembalian: "",
+      totalHarga: "",
+    });
+    setEditId(null);
+  };
 
-//       if (editId) {
-//         // Update data
-//         await updatePenyewaan(editId, dataToSend);
-//         setMessage("Penyewaan updated successfully!");
-//       } else {
-//         // Create data
-//         await createPenyewaan(dataToSend);
-//         setMessage("Penyewaan added successfully!");
-//       }
+  const handleEdit = (p) => {
+    setForm({
+      name: p.name,
+      item: p.item,
+      tanggalSewa: p.tanggalSewa,
+      tanggalKembali: p.tanggalKembali,
+      statusPembayaran: p.statusPembayaran,
+      statusPengembalian: p.statusPengembalian,
+      totalHarga: p.totalHarga,
+    });
+    setEditId(p.id);
+  };
 
-//       // Reset form dan update data
-//       setForm({
-//         name: "",
-//         tanggalSewa: "",
-//         tanggalKembali: "",
-//         statusPembayaran: "",
-//         statusPengembalian: "",
-//         totalHarga: "",
-//       });
-//       setEditId(null);
+  const handleDelete = (id) => {
+    const updatedPenyewaan = penyewaan.filter((p) => p.id !== id);
+    setPenyewaan(updatedPenyewaan);
+    setMessage("Penyewaan deleted successfully!");
+  };
 
-//       // Refetch data setelah submit
-//       const updatedData = await fetchPenyewaan();
-//       if (Array.isArray(updatedData)) {
-//         setPenyewaan(updatedData);
-//       } else if (updatedData && typeof updatedData === "object") {
-//         setPenyewaan([updatedData]);
-//       } else {
-//         setPenyewaan([]);
-//       }
-//     } catch (error) {
-//       console.error("Error submitting form:", error);
-//       setErrorMessage("An error occurred while processing your request.");
-//       setMessage("");
-//     }
-//   };
+  return (
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
+      <main className="flex-grow container mx-auto p-6">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-r from-blue-500 to-purple-600 from-purple-600 to-blue-500 text-white font-bold p-6 rounded-lg mb-12 w-full text-center shadow-lg">
+          <h1 className="text-4xl font-bold mb-4">Manage Penyewaan</h1>
+          <p className="text-xl">
+            Welcome to the penyewaan management page. Here you can add, edit,
+            and delete penyewaan data.
+          </p>
+        </section>
 
-//   // Handle edit
-//   const handleEdit = (p) => {
-//     setForm({
-//       name: p.penyewaan_pelanggan_id,
-//       tanggalSewa: p.penyewaan_tglsewa,
-//       tanggalKembali: p.penyewaan_tglkembali,
-//       statusPembayaran: p.penyewaan_sttspembayaran,
-//       statusPengembalian: p.penyewaan_sttskembali,
-//       totalHarga: p.penyewaan_totalharga,
-//     });
-//     setEditId(p.id);
-//   };
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="mb-6 bg-white p-6 rounded-lg shadow-md"
+        >
+          {message && (
+            <div className="mb-4 text-green-500 text-sm">{message}</div>
+          )}
+          {errorMessage && (
+            <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
+          )}
+          <div className="mb-4 flex items-center">
+            <FaUser className="mr-2 text-blue-500" />
+            <input
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={form.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4 flex items-center">
+            <FaLaptop className="mr-2 text-blue-500" />
+            <input
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="item"
+              placeholder="Item"
+              value={form.item}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4 flex items-center">
+            <FaCalendarAlt className="mr-2 text-blue-500" />
+            <input
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="date"
+              name="tanggalSewa"
+              placeholder="Tanggal Sewa"
+              value={form.tanggalSewa}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4 flex items-center">
+            <FaCalendarAlt className="mr-2 text-blue-500" />
+            <input
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="date"
+              name="tanggalKembali"
+              placeholder="Tanggal Kembali"
+              value={form.tanggalKembali}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4 flex items-center">
+            <FaMoneyCheckAlt className="mr-2 text-blue-500" />
+            <select
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              name="statusPembayaran"
+              value={form.statusPembayaran}
+              onChange={handleChange}
+            >
+              <option value="">Select Status</option>
+              <option value="Lunas">Lunas</option>
+              <option value="Belum Dibayar">Belum Dibayar</option>
+            </select>
+          </div>
+          <div className="mb-4 flex items-center">
+            <FaExchangeAlt className="mr-2 text-blue-500" />
+            <select
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              name="statusPengembalian"
+              value={form.statusPengembalian}
+              onChange={handleChange}
+            >
+              <option value="">Select Status</option>
+              <option value="Kembali">Kembali</option>
+              <option value="Belum Kembali">Belum Kembali</option>
+            </select>
+          </div>
+          <div className="mb-4 flex items-center">
+            <FaMoneyCheckAlt className="mr-2 text-blue-500" />
+            <input
+              className="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="number"
+              name="totalHarga"
+              placeholder="Total Harga"
+              value={form.totalHarga}
+              onChange={handleChange}
+            />
+          </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            type="submit"
+          >
+            {editId ? "Update Penyewaan" : "Add Penyewaan"}
+          </button>
+        </form>
 
-//   // Handle delete
-//   const handleDelete = async (id) => {
-//     try {
-//       await deletePenyewaan(id);
-
-//       // Refetch data setelah delete
-//       const updatedData = await fetchPenyewaan();
-//       if (Array.isArray(updatedData)) {
-//         setPenyewaan(updatedData);
-//       } else if (updatedData && typeof updatedData === "object") {
-//         setPenyewaan([updatedData]);
-//       } else {
-//         setPenyewaan([]);
-//       }
-
-//       setMessage("Penyewaan deleted successfully!");
-//     } catch (error) {
-//       console.error("Error deleting penyewaan:", error);
-//       setErrorMessage("An error occurred while deleting the penyewaan.");
-//     }
-//   };
-
-//   return (
-//     <div className="p-5">
-//       <h1 className="text-2xl font-bold mb-4">Manage Penyewaan</h1>
-//       <p className="text-gray-600 mb-4">
-//         Welcome to the penyewaan management page. Here you can add, edit, and delete penyewaan data.
-//       </p>
-//       {message && <div className="text-green-600">{message}</div>}
-//       {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-
-//       {/* Form Penyewaan */}
-//       <form onSubmit={handleSubmit} className="space-y-3">
-//         <input
-//           type="text"
-//           name="name"
-//           value={form.name}
-//           onChange={handleChange}
-//           placeholder="Pelanggan ID"
-//           className="border p-2 w-full"
-//         />
-//         <input
-//           type="date"
-//           name="tanggalSewa"
-//           value={form.tanggalSewa}
-//           onChange={handleChange}
-//           className="border p-2 w-full"
-//         />
-//         <input
-//           type="date"
-//           name="tanggalKembali"
-//           value={form.tanggalKembali}
-//           onChange={handleChange}
-//           className="border p-2 w-full"
-//         />
-//         <select
-//           name="statusPembayaran"
-//           value={form.statusPembayaran}
-//           onChange={handleChange}
-//           className="border p-2 w-full"
-//         >
-//           <option value="">Select Status Pembayaran</option>
-//           <option value="Lunas">Lunas</option>
-//           <option value="Belum Dibayar">Belum Dibayar</option>
-//         </select>
-//         <select
-//           name="statusPengembalian"
-//           value={form.statusPengembalian}
-//           onChange={handleChange}
-//           className="border p-2 w-full"
-//         >
-//           <option value="">Select Status Pengembalian</option>
-//           <option value="Kembali">Kembali</option>
-//           <option value="Belum Kembali">Belum Kembali</option>
-//         </select>
-//         <input
-//           type="number"
-//           name="totalHarga"
-//           value={form.totalHarga}
-//           onChange={handleChange}
-//           placeholder="Total Harga"
-//           className="border p-2 w-full"
-//         />
-//         <button type="submit" className="bg-blue-500 text-white p-2 w-full">
-//           {editId ? "Update Penyewaan" : "Add Penyewaan"}
-//         </button>
-//       </form>
-
-//       {/* Loading State */}
-//       {loading ? (
-//         <p>Loading...</p>
-//       ) : (
-//         <ul className="mt-5 space-y-3">
-//           {penyewaan.length > 0 ? (
-//             penyewaan?.map((p) => (
-//               <li key={p.id} className="border p-3">
-//                 <strong>ID Pelanggan: {p.penyewaan_pelanggan_id}</strong>
-//                 <p>Tanggal Sewa: {p.penyewaan_tglsewa}</p>
-//                 <p>Tanggal Kembali: {p.penyewaan_tglkembali}</p>
-//                 <p>Status Pembayaran: {p.penyewaan_sttspembayaran}</p>
-//                 <p>Status Pengembalian: {p.penyewaan_sttskembali}</p>
-//                 <p>Total Harga: Rp {p.penyewaan_totalharga.toLocaleString()}</p>
-//                 <button
-//                   onClick={() => handleEdit(p)}
-//                   className="bg-yellow-500 text-white p-2 mr-2"
-//                 >
-//                   Edit
-//                 </button>
-//                 <button
-//                   onClick={() => handleDelete(p.id)}
-//                   className="bg-red-500 text-white p-2"
-//                 >
-//                   Delete
-//                 </button>
-//               </li>
-//             ))
-//           ) : (
-//             <p>No data available.</p>
-//           )}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// }
+        {/* List Penyewaan */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {penyewaan.map((p) => (
+            <div
+              key={p.id}
+              className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300"
+            >
+              <h2 className="text-2xl font-bold mb-2 text-gray-900">
+                {p.name}
+              </h2>
+              <p className="text-gray-700">
+                <FaLaptop className="inline mr-2 text-blue-500" /> Item:{" "}
+                {p.item}
+              </p>
+              <p className="text-gray-700">
+                <FaCalendarAlt className="inline mr-2 text-blue-500" /> Tanggal
+                Sewa: {p.tanggalSewa}
+              </p>
+              <p className="text-gray-700">
+                <FaCalendarAlt className="inline mr-2 text-blue-500" /> Tanggal
+                Kembali: {p.tanggalKembali}
+              </p>
+              <p className="text-gray-700">
+                <FaMoneyCheckAlt className="inline mr-2 text-blue-500" /> Status
+                Pembayaran: {p.statusPembayaran}
+              </p>
+              <p className="text-gray-700">
+                <FaExchangeAlt className="inline mr-2 text-blue-500" /> Status
+                Pengembalian: {p.statusPengembalian}
+              </p>
+              <p className="text-gray-700">
+                <FaMoneyCheckAlt className="inline mr-2 text-blue-500" /> Total
+                Harga: Rp {p.totalHarga.toLocaleString()}
+              </p>
+              <div className="mt-4 flex space-x-2">
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  onClick={() => handleEdit(p)}
+                >
+                  <FaEdit className="mr-2 inline" /> Edit
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+                  onClick={() => handleDelete(p.id)}
+                >
+                  <FaTrashAlt className="mr-2 inline" /> Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+}

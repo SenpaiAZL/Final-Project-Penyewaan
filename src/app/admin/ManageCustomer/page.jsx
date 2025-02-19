@@ -231,7 +231,7 @@ export default function ManageCustomers() {
               </div>
             </div>
           ))}
-        </div> 
+        </div>
       </main>
     </div>
   );

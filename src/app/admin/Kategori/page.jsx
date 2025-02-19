@@ -79,7 +79,9 @@ export default function ManageKategori() {
       setKategori(updatedData.data);
     } catch (error) {
       console.error("Error deleting category:", error);
-      setErrorMessage(error.response?.data?.message || "Failed to delete category.");
+      setErrorMessage(
+        error.response?.data?.message || "Failed to delete category."
+      );
     }
   };
 
@@ -87,7 +89,7 @@ export default function ManageKategori() {
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-12">
       <main className="flex-grow container mx-auto p-6">
         {/* Hero Section */}
-        <section className="bg-gray-600 text-white p-6 rounded-lg shadow-lg mb-12 w-full text-center">
+        <section className="bg-gradient-to-r from-blue-500 to-purple-600 from-purple-600 to-blue-500 text-white font-bold p-6 rounded-lg mb-12 w-full text-center shadow-lg">
           <h1 className="text-4xl font-bold mb-4">Manage Kategori</h1>
           <p className="text-xl">
             Welcome to the kategori management page. Here you can add, edit, and
