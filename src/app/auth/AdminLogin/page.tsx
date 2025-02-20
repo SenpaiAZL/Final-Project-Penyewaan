@@ -1,25 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import Head from "next/head";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify"; // Import Toastify
-import "react-toastify/dist/ReactToastify.css"; // Import CSS untuk styling
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styles from "@/styles/AdminLogin.module.css"; // Import the external CSS file
 
-const AdminLogin = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [message, setMessage] = useState("");
+const AdminLogin: React.FC = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
     setMessage("Loading...");
+
     if (!username || !password) {
       setErrorMessage("Please fill in all fields.");
       setMessage("");
       return;
     }
+
     try {
       const response = await axios.post(
         "https://api-elektronik-finalproject.aran8276.site/api/admin/login",
@@ -33,16 +36,16 @@ const AdminLogin = () => {
           },
         }
       );
+
       console.log("Response from API:", response.data);
 
-      // Simpan token ke localStorage
-
+      // Save token to localStorage
       localStorage.setItem("adminToken", response.data.token);
 
-      // Tampilkan notifikasi sukses menggunakan Toastify
+      // Display success notification using Toastify
       toast.success("Login successful! Redirecting...", {
         position: "top-right",
-        autoClose: 2000, // Notifikasi akan hilang setelah 2 detik
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -52,12 +55,16 @@ const AdminLogin = () => {
       setTimeout(() => {
         window.location.href = "/admin/AdminDashboard";
       }, 2000);
-    } catch (error) {
+    } catch (err) {
+      const error = err as {
+        response?: { data?: { message?: string } };
+        message: string;
+      };
       console.error("Error from API:", error.response?.data || error.message);
       setErrorMessage(error.response?.data?.message || "Login failed");
       setMessage("");
 
-      // Tampilkan notifikasi gagal menggunakan Toastify
+      // Display error notification using Toastify
       toast.error("Login failed. Please try again.", {
         position: "top-right",
         autoClose: 3000,
@@ -71,19 +78,13 @@ const AdminLogin = () => {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen"
-      style={{
-        backgroundImage: "url('/purple.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      className={`flex items-center justify-center min-h-screen ${styles.background}`}
     >
       <Head>
         <title>Admin Login Page</title>
       </Head>
 
-      {/* Toast Container untuk menampilkan notifikasi */}
+      {/* Toast Container for notifications */}
       <ToastContainer />
 
       <div className="flex flex-row items-center bg-white shadow-2xl rounded-lg p-8 max-w-4xl w-full space-x-8">
@@ -159,7 +160,7 @@ const AdminLogin = () => {
         </div>
       </div>
       <button
-        className="fixed bottom-4 left-4 p-2 bg-gray-300 rounded-full hover:bg-gray-400 focus:outline-none"
+        className={`fixed ${styles.backButton}`}
         onClick={() => (window.location.href = "/auth/Login")}
       >
         🔙
