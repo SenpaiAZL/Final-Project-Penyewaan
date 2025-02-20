@@ -3,7 +3,7 @@ describe("ManagePenyewaan Component Tests", () => {
     cy.visit("/admin/Penyewaan");
   });
 
-  it("should allow typing in the form fields", () => {
+  it("Ngetik diKolom Formulir", () => {
     cy.get('input[name="name"]').type("Erlyta");
     cy.get('input[name="item"]').type("Komputer");
     cy.get('input[name="tanggalSewa"]').type("2023-04-08");
@@ -13,7 +13,7 @@ describe("ManagePenyewaan Component Tests", () => {
     cy.get('input[name="totalHarga"]').type("100.000");
   });
 
-  it("should allow submitting the form", () => {
+  it("Ngirim Formulir", () => {
     cy.get('input[name="name"]').type("Erlyta");
     cy.get('input[name="item"]').type("Komputer");
     cy.get('input[name="tanggalSewa"]').type("2023-04-08");
@@ -25,14 +25,14 @@ describe("ManagePenyewaan Component Tests", () => {
     cy.get('button[type="submit"]').click();
   });
 
-  it("should allow editing a penyewaan", () => {
+  it("Ngedit Penyewaan", () => {
     cy.contains("Edit").first().click();
 
     cy.get('input[name="name"]').clear().type("Updated Name");
     cy.get('button[type="submit"]').click();
   });
 
-  it("should allow deleting a penyewaan", () => {
+  it("Hapus Penyewaan", () => {
     cy.contains("Delete").first().click();
   });
 });
