@@ -7,8 +7,18 @@ import Card from "@/components/card/Card";
 import { fetchAlat } from "@/app/api";
 import { motion } from "framer-motion";
 
+interface Alat {
+  alat_id: string;
+  alat_nama: string;
+  alat_hargaperhari: string;
+  alat_stok: number;
+  alat_deskripsi: string;
+  alat_kategori: string;
+  // add other properties like 'alat_image' if needed
+}
+
 export default function Home() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Alat[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -27,6 +37,10 @@ export default function Home() {
     };
     fetchData();
   }, []);
+
+  const handleClick = (alat: Alat) => {
+    console.log(`Card clicked: ${alat.alat_nama}`);
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -57,12 +71,6 @@ export default function Home() {
               >
                 Get Started
               </a>
-              {/* Additional Content */}
-              {/* <div className="mt-10">
-                <h1 className="text-2xl text-gray-700 font-semibold animate-fade-in">
-                  Homepage
-                </h1>
-              </div> */}
             </div>
           </section>
 
@@ -104,7 +112,7 @@ export default function Home() {
           >
             {products.map((product) => (
               <div key={product.alat_id} className="flex justify-center">
-                <Card alat={product} />
+                <Card alat={product} onClick={() => handleClick(product)} />
               </div>
             ))}
           </Carousel>
