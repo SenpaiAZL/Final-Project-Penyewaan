@@ -4,7 +4,7 @@ import Head from "next/head";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "@/styles/AdminLogin.module.css"; // Import the external CSS file
+import styles from "@/app/styles/AdminLogin.module.css"; // Import the external CSS file
 
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState<string>("");

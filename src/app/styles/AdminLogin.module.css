@@ -1,0 +1,19 @@
+.background {
+  background-image: url('/purple.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.backButton {
+  position: fixed;
+  bottom: 4px;
+  left: 4px;
+  padding: 2px;
+  background-color: #e2e8f0;
+  border-radius: 50%;
+}
+
+.backButton:hover {
+  background-color: #cbd5e0;
+}
