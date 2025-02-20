@@ -36,7 +36,8 @@ const AdminLogin = () => {
       console.log("Response from API:", response.data);
 
       // Simpan token ke localStorage
-      localStorage.setItem("adminToken", response.data.accesstoken);
+
+      localStorage.setItem("adminToken", response.data.token);
 
       // Tampilkan notifikasi sukses menggunakan Toastify
       toast.success("Login successful! Redirecting...", {

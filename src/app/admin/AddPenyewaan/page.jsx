@@ -49,7 +49,7 @@ export default function AddPenyewaan() {
       try {
         const response = await fetchPenyewaan();
         if (response && response.data && Array.isArray(response.data)) {
-          console.log("data: ", response.data)
+          console.log("data: ", response.data);
           setPenyewaanList(response.data);
         } else if (Array.isArray(response)) {
           setPenyewaanList(response);
@@ -91,15 +91,23 @@ export default function AddPenyewaan() {
 
     try {
       if (editData) {
-        await updatePenyewaan(editData.penyewaan_id, {
-          penyewaan_pelanggan_id: Number(form.idPelanggan),
-          penyewaan_tglsewa: form.tanggalSewa,
-          penyewaan_tglkembali: form.tanggalKembali,
-          penyewaan_sttspembayaran: form.statusPembayaran,
-          penyewaan_sttskembali: form.statusPengembalian,
-          penyewaan_totalharga: Number(form.totalHarga),
-        });
-        setMessage("Penyewaan updated successfully!");
+        try {
+          const response = await updatePenyewaan(editData.penyewaan_id, {
+            penyewaan_pelanggan_id: Number(form.idPelanggan),
+            penyewaan_tglsewa: form.tanggalSewa,
+            penyewaan_tglkembali: form.tanggalKembali,
+            penyewaan_sttspembayaran: form.statusPembayaran,
+            penyewaan_sttskembali: form.statusPengembalian,
+            penyewaan_totalharga: Number(form.totalHarga),
+          });
+          console.log("Update success:", response);
+          setMessage("Penyewaan updated successfully!");
+        } catch (error) {
+          console.error("Error updating:", error.response?.data || error);
+          setErrorMessage(
+            error.response?.data?.message || "An error occurred."
+          );
+        }
       } else {
         await createPenyewaan({
           penyewaan_pelanggan_id: Number(form.idPelanggan),
@@ -123,7 +131,7 @@ export default function AddPenyewaan() {
       setEditData(null);
 
       const updatedPenyewaan = await fetchPenyewaan();
-      setPenyewaanList(updatedPenyewaan);
+      setPenyewaanList(updatedPenyewaan.data);
     } catch (error) {
       console.error("Error submitting form:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred.");
@@ -164,17 +172,25 @@ export default function AddPenyewaan() {
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-lg mb-6 text-center">
         <h1 className="text-4xl font-bold mb-2">Add Penyewaan</h1>
         <p className="text-lg">
-          Welcome to the penyewaan management page. Here you can add new penyewaan.
+          Welcome to the penyewaan management page. Here you can add new
+          penyewaan.
         </p>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md mb-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-lg shadow-md mb-6"
+      >
         {message && (
-          <div className="bg-green-500 text-white p-3 rounded mb-4">{message}</div>
+          <div className="bg-green-500 text-white p-3 rounded mb-4">
+            {message}
+          </div>
         )}
         {errorMessage && (
-          <div className="bg-red-500 text-white p-3 rounded mb-4">{errorMessage}</div>
+          <div className="bg-red-500 text-white p-3 rounded mb-4">
+            {errorMessage}
+          </div>
         )}
 
         <div className="mb-4">
@@ -190,7 +206,10 @@ export default function AddPenyewaan() {
             <option value="">-- Select Pelanggan --</option>
             {Array.isArray(customers) &&
               customers.map((customer) => (
-                <option key={customer.pelanggan_id} value={customer.pelanggan_id}>
+                <option
+                  key={customer.pelanggan_id}
+                  value={customer.pelanggan_id}
+                >
                   {customer.pelanggan_id} - {customer.pelanggan_nama}
                 </option>
               ))}
@@ -198,7 +217,9 @@ export default function AddPenyewaan() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Tanggal Sewa</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Tanggal Sewa
+          </label>
           <input
             type="date"
             name="tanggalSewa"
@@ -209,7 +230,9 @@ export default function AddPenyewaan() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Tanggal Kembali</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Tanggal Kembali
+          </label>
           <input
             type="date"
             name="tanggalKembali"
@@ -220,7 +243,9 @@ export default function AddPenyewaan() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Status Pembayaran</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Status Pembayaran
+          </label>
           <select
             name="statusPembayaran"
             value={form.statusPembayaran}
@@ -234,7 +259,9 @@ export default function AddPenyewaan() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Status Pengembalian</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Status Pengembalian
+          </label>
           <select
             name="statusPengembalian"
             value={form.statusPengembalian}
@@ -242,13 +269,15 @@ export default function AddPenyewaan() {
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             <option value="">-- Select Status --</option>
-            <option value="Kembali">Kembali</option>
+            <option value="Sudah Kembali">Sudah Kembali</option>
             <option value="Belum Kembali">Belum Kembali</option>
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Total Harga</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Total Harga
+          </label>
           <input
             type="number"
             name="totalHarga"
@@ -297,14 +326,22 @@ export default function AddPenyewaan() {
                     <td className="p-3">{penyewaan.penyewaan_pelanggan_id}</td>
                     <td className="p-3">{penyewaan.penyewaan_id}</td>
                     <td className="p-3">
-                      {new Date(penyewaan.penyewaan_tglsewa).toLocaleDateString()}
+                      {new Date(
+                        penyewaan.penyewaan_tglsewa
+                      ).toLocaleDateString()}
                     </td>
                     <td className="p-3">
-                      {new Date(penyewaan.penyewaan_tglkembali).toLocaleDateString()}
+                      {new Date(
+                        penyewaan.penyewaan_tglkembali
+                      ).toLocaleDateString()}
                     </td>
-                    <td className="p-3">{penyewaan.penyewaan_sttspembayaran}</td>
+                    <td className="p-3">
+                      {penyewaan.penyewaan_sttspembayaran}
+                    </td>
                     <td className="p-3">{penyewaan.penyewaan_sttskembali}</td>
-                    <td className="p-3">Rp {penyewaan.penyewaan_totalharga.toLocaleString()}</td>
+                    <td className="p-3">
+                      Rp {penyewaan.penyewaan_totalharga.toLocaleString()}
+                    </td>
                     <td className="p-3">
                       <button
                         onClick={() => handleEdit(penyewaan.penyewaan_id)}

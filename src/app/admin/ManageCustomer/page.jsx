@@ -56,9 +56,13 @@ export default function ManageCustomers() {
       } else {
         // Create customer
         const newCustomer = await createUser(form);
+        console.log("New customer response:", newCustomer); // Debugging
         setMessage("Pelanggan berhasil ditambahkan!");
-        // Update local state
-        setCustomers((prevCustomers) => [...prevCustomers, newCustomer]);
+
+        setCustomers((prevCustomers) => [
+          ...prevCustomers,
+          newCustomer.data || newCustomer,
+        ]);
       }
       // Reset form
       setForm({
@@ -207,7 +211,7 @@ export default function ManageCustomers() {
             >
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
                 {customer.pelanggan_nama}
-              </h2> 
+              </h2>
               <p className="text-gray-600">ID: {customer.pelanggan_id}</p>
               <p className="text-gray-700">Email: {customer.pelanggan_email}</p>
               <p className="text-gray-700">

@@ -29,6 +29,7 @@ export default function AddItem() {
   const [penyewaanList, setPenyewaanList] = useState([]); // State untuk menyimpan data penyewaan_detail
   const [penyewaanOptions, setPenyewaanOptions] = useState([]); // State untuk menyimpan daftar penyewaan
   const [alatOptions, setAlatOptions] = useState([]); // State untuk menyimpan daftar alat
+  const [editForm, setEditForm] = useState(null);
 
   // Fetch data penyewaan_detail, penyewaan, dan alat saat komponen dimuat
   useEffect(() => {
@@ -64,8 +65,7 @@ export default function AddItem() {
     e.preventDefault();
     setMessage("Loading...");
     setErrorMessage("");
-
-    // Validasi input
+  
     if (
       !form.penyewaan_detail_penyewaan_id ||
       !form.penyewaan_detail_alat_id ||
@@ -76,27 +76,37 @@ export default function AddItem() {
       setMessage("");
       return;
     }
-
+  
     try {
-      // Kirim data ke API
-      await createPenyewaanDetail({
-        penyewaan_detail_penyewaan_id: Number(form.penyewaan_detail_penyewaan_id),
-        penyewaan_detail_alat_id: Number(form.penyewaan_detail_alat_id),
-        penyewaan_detail_jumlah: Number(form.penyewaan_detail_jumlah),
-        penyewaan_detail_subharga: Number(form.penyewaan_detail_subharga),
-      });
-
-      // Berhasil menambahkan item
-      setMessage("Item added successfully!");
-
-      // Reset form
+      if (editForm) {
+        // Jika sedang edit, gunakan updatePenyewaanDetail
+        await updatePenyewaanDetail(editForm.penyewaan_detail_id, {
+          penyewaan_detail_penyewaan_id: Number(form.penyewaan_detail_penyewaan_id),
+          penyewaan_detail_alat_id: Number(form.penyewaan_detail_alat_id),
+          penyewaan_detail_jumlah: Number(form.penyewaan_detail_jumlah),
+          penyewaan_detail_subharga: Number(form.penyewaan_detail_subharga),
+        });
+        setMessage("Item updated successfully!");
+      } else {
+        // Jika tidak sedang edit, buat item baru
+        await createPenyewaanDetail({
+          penyewaan_detail_penyewaan_id: Number(form.penyewaan_detail_penyewaan_id),
+          penyewaan_detail_alat_id: Number(form.penyewaan_detail_alat_id),
+          penyewaan_detail_jumlah: Number(form.penyewaan_detail_jumlah),
+          penyewaan_detail_subharga: Number(form.penyewaan_detail_subharga),
+        });
+        setMessage("Item added successfully!");
+      }
+  
+      // Reset form & mode edit
       setForm({
         penyewaan_detail_penyewaan_id: "",
         penyewaan_detail_alat_id: "",
         penyewaan_detail_jumlah: "",
         penyewaan_detail_subharga: "",
       });
-
+      setEditForm(null); // Reset mode edit
+  
       // Muat ulang data penyewaan_detail
       const updatedData = await fetchPenyewaanDetail();
       setPenyewaanList(updatedData.data);
@@ -106,38 +116,23 @@ export default function AddItem() {
       setMessage("");
     }
   };
+  
 
-  
   // Fungsi untuk handle edit
-  const handleEdit = async (id) => {
-    console.log("Edit button clicked, ID:", id); // Debugging
-  
-    try {
-      const itemToEdit = penyewaanList.find((item) => item.penyewaan_detail_id === id);
-      
-      if (!itemToEdit) {
-        setErrorMessage("Item not found.");
-        return;
-      }
-  
-      console.log("Item to edit:", itemToEdit); // Debugging
-  
-      await updatePenyewaanDetail(id, {
-        penyewaan_detail_penyewaan_id: itemToEdit.penyewaan_detail_penyewaan_id,
-        penyewaan_detail_alat_id: itemToEdit.penyewaan_detail_alat_id,
-        penyewaan_detail_jumlah: itemToEdit.penyewaan_detail_jumlah,
-        penyewaan_detail_subharga: itemToEdit.penyewaan_detail_subharga,
-      });
-  
-      setMessage("Item updated successfully!");
-  
-      const updatedData = await fetchPenyewaanDetail();
-      console.log("Updated data received:", updatedData.data);
-      setPenyewaanList(updatedData.data);
-    } catch (error) {
-      console.error("Error editing item:", error);
-      setErrorMessage(error.response?.data?.message || "An error occurred.");
+  const handleEdit = (id) => {
+    const itemToEdit = penyewaanList.find((item) => item.penyewaan_detail_id === id);
+    if (!itemToEdit) {
+      setErrorMessage("Item not found.");
+      return;
     }
+    setEditForm(itemToEdit);
+    setForm({
+      penyewaan_detail_penyewaan_id: itemToEdit.penyewaan_detail_penyewaan_id.toString(),
+      penyewaan_detail_alat_id: itemToEdit.penyewaan_detail_alat_id.toString(),
+      penyewaan_detail_jumlah: itemToEdit.penyewaan_detail_jumlah.toString(),
+      penyewaan_detail_subharga: itemToEdit.penyewaan_detail_subharga.toString(),
+    });
+    setMessage("");
   };
 
   // Fungsi untuk handle delete
@@ -169,7 +164,10 @@ export default function AddItem() {
         </section>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mb-6 bg-white p-6 rounded-lg shadow-md">
+        <form
+          onSubmit={handleSubmit}
+          className="mb-6 bg-white p-6 rounded-lg shadow-md"
+        >
           {message && (
             <div className="mb-4 text-green-500 text-sm">{message}</div>
           )}
@@ -194,7 +192,10 @@ export default function AddItem() {
             >
               <option value="">-- Pilih Penyewaan --</option>
               {penyewaanOptions.map((penyewaan) => (
-                <option key={penyewaan.penyewaan_id} value={penyewaan.penyewaan_id}>
+                <option
+                  key={penyewaan.penyewaan_id}
+                  value={penyewaan.penyewaan_id}
+                >
                   {penyewaan.penyewaan_id}
                 </option>
               ))}
@@ -252,11 +253,9 @@ export default function AddItem() {
           </div>
 
           {/* Submit Button */}
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            type="submit"
+          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
-            Add Item
+              {editForm ? "Update Item" : "Add Item"}
           </button>
         </form>
 
@@ -278,7 +277,9 @@ export default function AddItem() {
                 <tbody>
                   {penyewaanList.map((item) => (
                     <tr key={item.penyewaan_detail_id} className="border-b">
-                      <td className="p-3">{item.penyewaan_detail_penyewaan_id}</td>
+                      <td className="p-3">
+                        {item.penyewaan_detail_penyewaan_id}
+                      </td>
                       <td className="p-3">{item.penyewaan_detail_alat_id}</td>
                       <td className="p-3">{item.penyewaan_detail_jumlah}</td>
                       <td className="p-3">
