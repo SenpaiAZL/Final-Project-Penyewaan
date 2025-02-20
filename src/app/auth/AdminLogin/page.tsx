@@ -12,8 +12,8 @@ const AdminLogin: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (a: FormEvent<HTMLFormElement>) => {
+    a.preventDefault();
     setErrorMessage("");
     setMessage("Loading...");
 
