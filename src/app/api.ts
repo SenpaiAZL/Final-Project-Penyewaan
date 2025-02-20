@@ -20,7 +20,7 @@ const refreshAccessToken = async () => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " +refreshToken
+          Authorization: "Bearer " + refreshToken,
         },
       }
     );
@@ -29,7 +29,9 @@ const refreshAccessToken = async () => {
 
     const newAccessToken = response.data.access_token;
     if (!newAccessToken) {
-      throw new Error("Invalid response from /auth/refresh: Missing access_token");
+      throw new Error(
+        "Invalid response from /auth/refresh: Missing access_token"
+      );
     }
 
     ACCESS_TOKEN = newAccessToken; // Perbarui access token global
@@ -122,7 +124,9 @@ export const login = async (credentials) => {
     ACCESS_TOKEN = access_token;
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh_token);
     localStorage.setItem("access_token", access_token); // Simpan refresh token di localStorage
-    apiClient.defaults.headers.common["Authorization"] = `Bearer ${ACCESS_TOKEN}`;
+    apiClient.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${ACCESS_TOKEN}`;
     return response.data;
   } catch (error) {
     console.error("Login failed:", error);
@@ -140,7 +144,7 @@ export const logout = () => {
 // Fungsi untuk fetch data alat
 export const fetchAlat = async () => {
   try {
-    const response = (await apiClient.get("/alat" ));
+    const response = await apiClient.get("/alat");
     return response?.data;
   } catch (error) {
     console.error("Error fetching alat:", error);
@@ -148,26 +152,23 @@ export const fetchAlat = async () => {
   }
 };
 
-
-export const reset =async(email, token, password, password_confirmation)=>{
+export const reset = async (email, token, password, password_confirmation) => {
   try {
     const response = await apiClient.post(
-    "https://api-elektronik-finalproject.aran8276.site/api/auth/reset-password",
-    {
-      email,
-      token,
-      password,
-      password_confirmation,
-    }
-  );
-  console.log("Response dari API:", response.data);
-  return response.data}
-  catch(error){
+      "https://api-elektronik-finalproject.aran8276.site/api/auth/reset-password",
+      {
+        email,
+        token,
+        password,
+        password_confirmation,
+      }
+    );
+    console.log("Response dari API:", response.data);
+    return response.data;
+  } catch (error) {
     console.error("Error fetching alat:", error);
     throw error;
   }
-
-  
 };
 
 // Fungsi untuk fetch semua kategori
@@ -214,8 +215,7 @@ export const deleteKategori = async (id) => {
   }
 };
 
-
-// Fungsi untuk mengambil data alat 
+// Fungsi untuk mengambil data alat
 export const fetchalat = async () => {
   try {
     const response = await apiClient.get("/alat");
@@ -258,7 +258,6 @@ export const deleteAlat = async (id) => {
     throw error;
   }
 };
-
 
 // Fungsi untuk fetch semua pengguna
 export const fetchUsers = async () => {
@@ -347,7 +346,6 @@ export const deletePenyewaan = async (id) => {
     throw error;
   }
 };
-
 
 // Fungsi untuk fetch semua penyewaan_detail
 export const fetchPenyewaanDetail = async () => {
