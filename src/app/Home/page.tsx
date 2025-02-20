@@ -5,6 +5,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Card from "@/components/card/Card";
 import { fetchAlat } from "@/app/api";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -38,14 +39,17 @@ export default function Home() {
           <section className="relative text-center py-20 flex flex-col justify-center items-center min-h-screen">
             {/* Content */}
             <div className="flex flex-col justify-center items-center z-10">
-              {/* Floating Text (Moved Down) */}
-              <motionText className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-8 animate-float mt-auto">
+              <motion.h1
+                className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-8 animate-float mt-auto"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
                 Selamat Datang di{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
                   Voltify
                 </span>
-              </motionText>
-
+              </motion.h1>
               {/* Button with Hover and Float Effect */}
               <a
                 href="/user/Product"
@@ -53,7 +57,6 @@ export default function Home() {
               >
                 Get Started
               </a>
-
               {/* Additional Content */}
               {/* <div className="mt-10">
                 <h1 className="text-2xl text-gray-700 font-semibold animate-fade-in">
